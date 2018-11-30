@@ -1,0 +1,143 @@
+[
+  {
+    "Batch Name": "School Health Education - Telangana",
+    "Program": "SHE",
+    "Location": "Kesavaram",
+    "Duration": "One Month",
+    "Batch Roles": [
+      {
+        "name": "Program Manager",
+        "users": [
+          {
+            "name": "user1",
+            "id": "1"
+          },
+          {
+            "name": "user2",
+            "id": "7"
+          }
+        ]
+      },
+      {
+        "name": "Program Co-ordinator",
+        "users": [
+          {
+            "name": "user1",
+            "id": "1"
+          },
+          {
+            "name": "user2",
+            "id": "7"
+          }
+        ]
+      }
+    ],
+    "Batch Attendees": [
+      {
+        "name": "user1",
+        "id": "1"
+      },
+      {
+        "name": "user2",
+        "id": "2"
+      }
+    ],
+    "ProgramContentIndex": {
+      "name": "Index",
+      "children": [
+        {
+          "name": "Month1",
+          "id": "1",
+          "children": [
+            {
+              "name": "Month1 Day1",
+              "id": "2",
+              "children": [
+                {
+                  "id": "3",
+                  "name": "Item1",
+                  "contentId": "1",
+                  "role": "49",
+                  "user": "4"
+                },
+                {
+                  "id": "4",
+                  "name": "Item2",
+                  "contentId": "4",
+                  "role": "50",
+                  "user": "1"
+                }
+              ],
+              "role": "49",
+              "user": "7"
+            }
+          ],
+          "role": "49",
+          "user": "4"
+        },
+        {
+          "name": "Month2",
+          "id": "5",
+          "children": [
+            {
+              "name": "Month2 Day1",
+              "id": "6",
+              "children": [
+                {
+                  "id": "7",
+                  "name": "Item1",
+                  "contentId": "1",
+                  "role": "48",
+                  "user": "2"
+                },
+                {
+                  "id": "8",
+                  "name": "Itme2",
+                  "contentId": "3",
+                  "role": "50",
+                  "user": "6"
+                }
+              ],
+              "role": "49",
+              "user": "7"
+            }
+          ],
+          "role": "48",
+          "user": "2"
+        }
+      ],
+      "role": "48",
+      "user": "3"
+    },
+    "content": [
+      {
+        "id": "1",
+        "type": "video",
+        "name": "Hand Wash",
+        "file": "hand_wash.mp4",
+        "duration": 5
+      },
+      {
+        "id": "2",
+        "type": "test",
+        "name": "Pre Test",
+        "file": "hand_wash.ppt",
+        "duration": "NA"
+      },
+      {
+        "id": "3",
+        "type": "interactive",
+        "name": "Hand Wash Interactive",
+        "file": "hand_wash",
+        "duration": "NA"
+      },
+      {
+        "id": "4",
+        "type": "attendance",
+        "name": "Attendance",
+        "file": "",
+        "duration": "NA"
+      }
+    ]
+  }
+]

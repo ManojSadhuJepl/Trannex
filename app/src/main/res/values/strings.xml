@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Trannex</string>
+
+    <string name="title_activity_player">PlayerActivity</string>
+    <string name="userID">User Id</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="save">Save</string>
+    <string name="saveAndMove"><![CDATA[Save & move to next]]></string>
+    <string name="saveSyncMove"><![CDATA[Save,Sync & move to next]]></string>
+    <string name="cancel">Cancel</string>
+
+
+</resources>

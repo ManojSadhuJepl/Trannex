@@ -1,0 +1,572 @@
+<html>
+<head>
+  <title>INT001</title>
+
+    <!--
+ 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+    <script src="./js/jquery-1.12.4.js"></script>
+    <script src="./js/jquery-ui.js"></script>
+  
+  <style>
+
+       body{
+             background-color: gray;
+     }
+
+     #section1{
+                  position: absolute;
+                   background-color: #EFEFEF;
+                   width:1280px;
+                   height:720px;
+                   padding:0px;
+                   margin-left: 0px;
+                  left: 50%;
+                  top: 50%;
+                        /* append this lines to main container element of css  */
+                    transform: translate(-50%, -50%);
+                    transform-origin: center center;
+
+     }
+
+     #container1{
+                  position: absolute;
+                  background-color: ;
+                  width:1268px;
+                  height:606px;
+                  margin-left: 0px;
+                  margin-top: 50px;
+     }
+
+     #container2{
+                  position: absolute;
+                  background-color: ;
+                  width:200px;
+                  height:606px;
+                  float:left;
+                  border:0px solid black;
+                  padding: 5px;
+                  margin-left: 0px;
+                   margin-top: 50px;
+     }
+     #basket{
+                 margin-top: 540px;
+                 margin-left: -10px;
+     }
+
+     #reset{
+              margin-top: 0px;
+              margin-left: 20px;
+              cursor: pointer;
+              border-radius: 0px;
+              background-image:url(treset_1.png);
+              z-index: 10;
+     }
+
+     #reset:hover{
+     	             background-image:url(treset_2.png);
+     }
+     #instructions{
+              margin-top:0px;
+              margin-left: 20px;
+              cursor: pointer;
+              border-radius: 0px;
+              margin-left: 180px;
+               background-image:url(tinstructions_1.png);
+               z-index: 10;
+     }
+        #instructions:hover{
+     	             background-image:url(tinstructions_2.png);
+     }
+
+     .dragImages{
+                      background-color: wwhite;
+                      border-radius: 50%;
+                       cursor: -webkit-grab; cursor: grab;
+     }
+
+      .dropImage{
+                        position: absolute;
+                        width: 60px;
+                        height: 60px;
+                        
+                        background-size: 55px 55px !important;
+                        cursor: -webkit-grab; cursor: grab;
+
+    }
+
+    #reset:hover{
+	         transform: scale(0.96);
+   }
+   #instructions:hover{
+	         transform: scale(0.96);
+   }
+
+   .modal {
+   	position: absolute;
+    display: block; /* Hidden by default */
+    
+    z-index: 15; /* Sit on top */
+    padding-top: 200px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 73%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+ /* Modal Content */
+ .modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 40px;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 16px 16px 32px 16px rgba(0,0,0,0.2);
+
+}
+
+   #modal-title{
+   	               background-color:#bd9347 ;
+   	               position: absolute;
+   	              margin-left:-40px;
+   	              margin-top: -42px;
+   	               width: 86.5%;
+   }
+
+   #modal-title h2{   font-family: sans-serif;
+
+                    }
+
+   #modal-content p{
+                       padding: 0px;
+   	                   font-family: sans-serif;
+   }
+
+ #gotButton{
+               background-color: transparent;
+               background-image: url(tsubmit_1.png);
+               background-repeat: no-repeat;
+               float: right;
+               width: 120px;
+               height: 30px;
+               padding: 20px;
+               border-radius: 0px;
+               margin-top: -20px;
+               cursor: pointer;
+ }
+
+ #gotButton:hover{
+	         background-image: url(tsubmit_2.png);
+   }
+
+
+
+   #mainTitle{
+   	          /* background-color:#16a085;  bg color for center of ribbon */
+	           /*border:3px solid #eee; border color for center of ribbon */
+	           padding: 0 20px;
+               height: 56px;
+               display: inline-block;
+               position: relative;
+               margin-left: 208px;
+               margin-right: 56px;
+               width: 400px;
+               /* box-shadow: 16px 16px 32px 16px rgba(0,0,0,0.2);*/
+   }
+    #mainTitle h2{
+    	           	font-size: 28px;
+                     font-weight: 300;
+                     font-family: 'open sans';
+                     line-height: 54px;
+                     letter-spacing: 3px;
+                     height: 56px;
+                     margin: 0;
+                     display: inline-block;
+
+-                     webkit-font-smoothing: antialiased;
+                      white-space:nowrap;
+    }
+
+     #mainTitle a {
+                     color:#fff;
+                     text-decoration:none;
+    }
+
+    #errorMessage{
+    	            background-color: grey;
+    	            display: inline-block;
+    	            color: white;
+    	            padding: 5px;
+    	            width: 400px;
+    	            border-radius: 30px;
+    	            margin-left: 800px;
+    }
+     #errorMessage h2{
+     	 margin-left: 25px;
+     }
+
+   
+       #mainTitle{
+      position: absolute;
+   	           /*background-color:#16a085;  bg color for center of ribbon */
+	         /*  border:3px solid #eee; border color for center of ribbon */
+	           padding: 0 20px;
+               height: 25px;
+               display: inline-block;
+               position: relative;
+               margin-left: 400px;
+               margin-right: 56px;
+               margin-top: 0px;
+               width: 400px;
+                /*box-shadow: 16px 16px 32px 16px rgba(0,0,0,0.2);*/
+                z-index: 14;
+   }
+    #mainTitle h2{
+    	           	font-size: 22px;
+                     font-weight: bold;
+                     font-family: sans-serif;
+                     line-height: 54px;
+                     letter-spacing: 3px;
+                     height: 56px;
+                     margin: 0;
+                     display: inline-block;
+                     
+-                     webkit-font-smoothing: antialiased;
+                      white-space:nowrap;
+    }
+
+     #mainTitle a {
+                     color:#fff;
+                     text-decoration:none;
+    }
+
+   #header{
+   	           background-color: #4a7dbe;
+   	           position: absolute;
+   	           width: 100%;
+   	           height: 50px;
+   }
+      #footer{
+   	           background-color: #4a7dbe;
+   	           position: absolute;
+   	           width: 100%;
+   	           height: 50px;
+   	           margin-top: 670px;
+   }
+
+   #logo{
+   	                 position: absolute;
+	   	             height:58px;
+	   	             width:350px; 
+	   	             background-image:url(logo.png);
+	   	             background-repeat: no-repeat;
+	   	             left:0px; 
+	   	             top:0px;
+	   	             z-index: 20;
+   }
+
+          .scaleable-wrapper {
+            resize: both;
+            position: absolute;
+            background: #bcbcbc;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+        }
+
+        #modal-para{
+                      background-color: transparent;
+                      margin-top: 50px;
+                      margin-left: -20px;
+                      font-weight:  bold;
+        }
+
+
+  </style> 
+</head>
+<script>
+        $(function(){
+          var scaleValue;
+             /*
+               appending elements
+             */
+             $("body").append("<div id='scaleable-wrapper' class='scaleable-wrapper' ></div>");
+             $("#scaleable-wrapper").append("<div id='section1' ></div>");
+               $("#section1").append("<div id='header' style=''></div>");
+
+                  $(function(){
+         /* 
+         wraping code  starts 
+         Note : wraping code should be in end of parent function
+      */
+
+         var $el = $("#section1");
+            var elHeight = $el.outerHeight();
+            var elWidth = $el.outerWidth();
+            var $wrapper = $("#scaleable-wrapper");
+            window.onresize = function () {
+                doWindowResize(null,$wrapper);
+            }
+
+            function doWindowResize(event, parent) {
+                console.log("w: ",parent.width())
+                console.log("h: ",parent.height())
+                var scale, origin;
+                scale = Math.min(
+                        parent.width() / elWidth,
+                        parent.height() / elHeight
+                );
+                scaleValue = scale;
+                //alert(scaleValue);
+                $el.css({
+                    transform: "translate(-50%, -50%) " + "scale(" + scale + ")"
+                });
+
+            }
+
+            var starterData = {
+                width : function(){
+                   return $wrapper.width();
+                }
+                ,
+                height : function(){
+                    return $wrapper.height();
+                }
+            }
+             doWindowResize(null, starterData);
+
+          /* wraping code  ends */
+ });
+
+
+       	       $("#header").append("<div id='logo' style='' ></div>");
+       	       $("#header").append("<div id='mainTitle' ><h2><a>గుర్తించి ఆహార పదార్ధాలకు రంగులు వెయ్యండి</a></h2></div>");
+               $("#section1").append("<div id='footer' style=''></div>");
+
+             $("#section1").append("<div id='container1' ></div>");
+             $("#section1").append("<div id='container2'></div>");
+             
+              $("#container1").append("<div id='errorMessage' ><h2><a>Be Sure ! you have dropped in the wrong colour.</a></h2></div>");
+              $("#errorMessage").hide();
+           
+            modalBlock();function modalBlock(){
+
+             $("#section1").append("<div id='modal' class='modal'></div>");
+             $("#modal").append("<div id='modal-content' class='modal-content'><div id='modal-title' class='modal-title' ><h2 style='color:white; font-size:20px; margin-left:10px;'>సూచనలు</h2></div><div id='modal-para' class='modal-para' ><p> దిగువన కొన్ని రంగులను మరియు పైన కొన్ని చిత్రాలు చూపుతున్నాము</p> <p>ఆహార పదార్ధాలను లాగి, తగిన రంగు పాట్ లోకి ముంచండి</p> <p>ఆహార పదార్ధాలను తగిన రంగులో పొందుతారు</p></div></div>");
+             $("#modal-content").append("<div id='gotButton' class='gotButton'></div>");           
+
+              $("#gotButton").click(function(){
+             	  $(".modal").fadeOut();
+             });
+
+            }// modalBlock()
+ 
+             
+
+        
+         buttonAndBasket();function buttonAndBasket(){
+         	          $("#container2").append("<div id='basket' style='background-image:url(colorImages/basket.png);background-repeat:no-repeat;position:absolute;'></div>");
+                      $("#basket").css({height:250,width:250});
+                      $("#basket").css({backgroundSize:220});
+
+                     $("#footer").append("<div id='instructions' class='button' style='position:absolute;'></div>");
+                     $("#instructions").css({height:50,width:150});
+
+                     $("#footer").append("<div id='reset' class='button' style='position:absolute;'></div>");
+                     $("#reset").css({height:50,width:150});
+
+                      $("#reset").click(function(){ $("#container2").empty(); buttonAndBasket(); executeDragDropPlace(); });
+                       $("#instructions").click(function(){
+                       	     $("#modal").fadeIn();
+                       });
+         }//buttonAndBasket()
+
+     
+    executeDragDropPlace(); function executeDragDropPlace(){
+
+          var countArray = [];
+          var dropImageArray = []
+
+             var colors = [
+             {color:"colorImages/yellow.png",cat:"yellow",fruits:[{fruit:"banana",image:"colorFruits/yellowbanana.png"},{fruit:"mango",image:"colorFruits/yellowmango.png"},{fruit:"pineapple",image:"colorFruits/yellowpineapple.png"},{fruit:"capsicum",image:"colorFruits/yellowcapsicum.png"}]},
+
+                {color:"colorImages/green.png",cat:"green" ,fruits:[{fruit:"apple",image:"colorFruits/greenapple.png"},{fruit:"banana",image:"colorFruits/greenbanana.png"},{fruit:"brinjol",image:"colorFruits/greenbrinjol.png"},{fruit:"cabbage",image:"colorFruits/greencabbage.png"},{fruit:"capsicum",image:"colorFruits/greencapsicum.png"},{fruit:"chilli",image:"colorFruits/greenchilli.png"},{fruit:"gauva",image:"colorFruits/greengauva.png"},{fruit:"grapes",image:"colorFruits/greengrapes.png"},{fruit:"pineapple",image:"colorFruits/greenpineapple.png"},{fruit:"mango",image:"colorFruits/greenmango.png"},{fruit:"tomato",image:"colorFruits/greentomato.png"}]},
+
+             {color:"colorImages/red.png",cat:"red" ,fruits:[{fruit:"apple",image:"colorFruits/redapple.png"},{fruit:"chilli",image:"colorFruits/redchilli.png"},{fruit:"capsicum",image:"colorFruits/redcapsicum.png"},{fruit:"tomato",image:"colorFruits/redtomato.png"}]},
+
+             {color:"colorImages/orange.png",cat:"orange" ,fruits:[{fruit:"carrot",image:"colorFruits/carrot.png"}]},
+
+             {color:"colorImages/purple.png",cat:"purple",fruits:[{fruit:"brinjol",image:"colorFruits/purplebrinjol.png"},{fruit:"grapes",image:"colorFruits/purplegrapes.png"}]}
+             ];
+
+             var colorsPos = [{left:153},{left:366},{left:580},{left:789},{left:999}];
+
+             colorsPos = randamizeArray1(colorsPos);
+
+           for(var i=0; i<colors.length;i++){                
+            $("#container1").append("<div class='boxes' id='box_"+i+"' style='background-image:url("+colors[i].color+");  background-repeat: no-repeat;position:absolute;'></div>");
+              $("#box_"+i).css({height:315,width:330});
+              $("#box_"+i).css('background-size',350 );
+              $("#box_"+i).css({top:310,left:colorsPos[i].left});
+              $("#box_"+i).data("cat",colorsPos[i].cat);
+              $("#box_"+i).data("fruits",colors[i].fruits);
+
+             }
+
+           var blackFruitArray = [{image:"blackFruits/apple.png",fruit:"apple"},{image:"blackFruits/banana.png",fruit:"banana"},{image:"blackFruits/brinjol.png",fruit:"brinjol"},{image:"blackFruits/cabbage.png",fruit:"cabbage"},{image:"blackFruits/capsicum.png",fruit:"capsicum"},{image:"blackFruits/carrot.png",fruit:"carrot"},{image:"blackFruits/chilli.png",fruit:"chilli"},{image:"blackFruits/gauva.png",fruit:"gauva"},{image:"blackFruits/grapes.png",fruit:"grapes"},{image:"blackFruits/mango.png",fruit:"mango"},{image:"blackFruits/pineapple.png",fruit:"pineapple"},{image:"blackFruits/tomato.png",fruit:"tomato"}]; 
+           
+           var blackFruitsArrayCopy = [];
+          
+    
+           for(var i=0; i<blackFruitArray.length;i++){                
+            $("#container1").append("<div class='dragImages' id='dragImage_"+i+"' style='background-image:url("+blackFruitArray[i].image+");  background-repeat: no-repeat;position:absolute;'></div>");
+              $("#dragImage_"+i).css({height:260,width:260});
+              $("#dragImage_"+i).css('background-size',210 );
+              $("#dragImage_"+i).css({top:30,left:538});
+              $("#dragImage_"+i).fadeOut();
+              $("#dragImage_0").fadeIn();
+                $("#dragImage_"+i).data("position",{top:30,left:585});
+              $("#dragImage_"+i).data("image",blackFruitArray[i].image);
+              $("#dragImage_"+i).data("fruit",blackFruitArray[i].fruit);
+               $("#dragImage_"+i).data("obj",$("#dragImage_"+i));
+                //$("#dragImage_"+i).draggable({ revert: "invalid",containment:"#container1" });
+             // blackFruitsArrayCopy.push($("#dragImage_"+i));
+             }
+            
+            $(".dragImages").draggable({
+
+                drag:function(ev,ui){
+                  //alert(scaleValue);
+                 revert: "invalid";containment:"#container1";
+                     var changeLeft = ui.position.left ; // find change in left
+                     var newLeft =  changeLeft / scaleValue; // adjust new left by our Scale
+
+                      var changeTop = ui.position.top ; // find change in top
+                      var newTop =  changeTop / scaleValue; // adjust new top by our Scale
+
+                      ui.position.left = newLeft;
+                      ui.position.top = newTop;  
+                     //$(ui.draggable).css({left:newLeft,top:newTop});   
+
+                      //$("#posvalues").html('X:'+newLeft+ '<br> Y:'+newTop);        
+                 }
+
+           });
+
+            // $(".dragImages").draggable({});
+
+             $(".boxes").droppable({
+               accept:'.dragImages',
+               drop:function(ev,ui){
+                   var curImage = $(ui.draggable);
+                   var curImageId = $(ui.draggable).attr("id");
+                   var currBox = $(this);
+                   var currBoxId = currBox.attr("id");
+                   var fruitsData = currBox.data("fruits");
+                   var fruitData = curImage.data("fruit");
+                  // alert("s1::"+countArray.length);                 
+                   //alert("curImageId:"+curImageId+" countArray length :"+countArray.length);                
+                   //alert("dropImageArray ::"+dropImageArray); 
+                  for(i=0; i < fruitsData.length; i++){
+                    if(fruitsData[i].fruit == fruitData )
+                    {
+                    	countArray.push(curImage);
+                        curImage.remove();
+                        dropImageArray.push(fruitsData[i].image);
+                        $("#dragImage_"+countArray.length).fadeIn();
+                        dropImageOnBasket();
+                    }
+                    else{
+                    	    
+                    	   curImage.animate(curImage.data("position"));
+                    	
+                     }
+                  }//forloop
+                  //alert("s2::"+countArray.length); 	 
+
+               }
+             });//droppables
+           
+           var antiDuplication = [];// scan and remove second time repeated images before placing into the basket below.
+            var  placeOnBasketArray = [{left:4,top:522,z:12},{left:41,top:528,z:11},{left:77,top:525,z:10},{left:114,top:528,z:9},{left:18,top:518,z:8},{left:75,top:506,z:7},{left:112,top:494,z:6},{left:46,top:515,z:5},{left:75,top:500,z:4},{left:112,top:500,z:3},{left:134,top:523,z:2},{left:148,top:523,z:1}];
+             function dropImageOnBasket(){
+             	//$("#container2").empty();buttonAndBasket();
+             	for(i=0; i < dropImageArray.length; i++)
+             	{
+                    if(dropImageArray[i] !== antiDuplication[i]){
+                           
+                      $("#container2").append("<div id='dropImage_"+i+"' class='dropImage' style=' background-repeat: no-repeat; background-image:url("+dropImageArray[i]+");width:100px; height:100px; background-size:100px;'></div>");
+             		  $("#dropImage_"+i).animate({left:placeOnBasketArray[i].left,top:placeOnBasketArray[i].top},2000);
+             		   $("#dropImage_"+i).css({zIndex:placeOnBasketArray[i].z});
+             		   $("#dropImage_"+i).draggable({ revert: "invalid",containment:"#container2" });
+             		   antiDuplication.push(dropImageArray[i]);
+                    }  		 
+             	}
+             }//dropImageOnBasket()
+
+            
+      function randamizeArray1(array) {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+        while (0 !== currentIndex) {
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+          temporaryValue = array[currentIndex];
+          array[currentIndex] = array[randomIndex];
+          array[randomIndex] = temporaryValue;
+        }return array;
+      }//randomize()
+
+   }
+
+    });
+
+ $(function(){
+ 	       /* 
+         wraping code  starts 
+         Note : wraping code should be in end of parent function
+      */
+
+         var $el = $("#section1");
+            var elHeight = $el.outerHeight();
+            var elWidth = $el.outerWidth();
+            var $wrapper = $("#scaleable-wrapper");
+            window.onresize = function () {
+                doWindowResize(null,$wrapper);
+            }
+
+            function doWindowResize(event, parent) {
+                console.log("w: ",parent.width())
+                console.log("h: ",parent.height())
+                var scale, origin;
+                scale = Math.min(
+                        parent.width() / elWidth,
+                        parent.height() / elHeight
+                );
+                $el.css({
+                    transform: "translate(-50%, -50%) " + "scale(" + scale + ")"
+                });
+
+            }
+
+            var starterData = {
+                width : function(){
+                   return $wrapper.width();
+                }
+                ,
+                height : function(){
+                    return $wrapper.height();
+                }
+            }
+             doWindowResize(null, starterData);
+
+          /* wraping code  ends */
+ });
+</script>
+<body>	 
+</body>
+
+</html>
+
