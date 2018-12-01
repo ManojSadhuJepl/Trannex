@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_player_new.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import trannex.ukkoteknik.com.R
+import trannex.ukkoteknik.com.commons.Footer
 import trannex.ukkoteknik.com.entities.FeedbackAndTest
 import trannex.ukkoteknik.com.extensions.margins
 import trannex.ukkoteknik.com.extensions.replaceFragment

@@ -15,6 +15,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.support.v4.toast
 import trannex.ukkoteknik.com.R
 import trannex.ukkoteknik.com.entities.Attendance
 import trannex.ukkoteknik.com.entities.Attendee
@@ -65,6 +66,11 @@ class AttendanceFragment : Fragment() {
     }
 
     fun save() {
+
+        if (cbList.isEmpty()) {
+            toast("Please take Attendance").show()
+        }
+
         val attendanceData = jsonArray()
         for (checkBox in cbList) {
             if (checkBox.isChecked) {
@@ -125,7 +131,7 @@ class AttendanceFragment : Fragment() {
                             }
                         }
                         yesButton {
-                            text = "OK"
+                            //text = "OK"
                         }
                     }.show()
                 }

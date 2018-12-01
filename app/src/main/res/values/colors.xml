@@ -8,4 +8,6 @@
     <color name="black_overlay">#66000000</color>
 
     <color name="grey_text">#FFAAAAAA</color>
+
+    <color name="black_opacity">#524b5c</color>
 </resources>

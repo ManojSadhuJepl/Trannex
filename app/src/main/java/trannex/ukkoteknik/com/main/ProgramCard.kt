@@ -5,13 +5,10 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.support.v7.widget.CardView
-import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
-import com.github.salomonbrys.kotson.get
-import com.github.salomonbrys.kotson.int
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 import org.jetbrains.anko.sdk27.coroutines.onClick
@@ -39,23 +36,32 @@ fun ViewGroup.programCard(activity: Activity,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             elevation = 5f
         }
+        alpha = 0.8f
 
         verticalLayout {
-            textView(program) {
-                textColor = Color.parseColor("#00a7d0")
-                textSize = dip(25).toFloat()
-                width = MATCH_PARENT
-                backgroundColor = Color.parseColor("#f5f5f5")
-                padding = 10
-                setTypeface(null, Typeface.BOLD)
-            }
+            gravity = Gravity.CENTER
+            cardView {
+                radius = 50f
+                textView(program) {
+                    textColor = Color.parseColor("#00a7d0")
+                    textSize = dip(25).toFloat()
+                    width = MATCH_PARENT
+                    backgroundColor = Color.parseColor("#000000")
+                    padding = 10
+                    setTypeface(null, Typeface.BOLD)
+                    gravity = Gravity.CENTER
+                }
+
+            }.lparams(width = 100, height = 100).margins(top = 10, bottom = 10)
 
             verticalLayout {
                 padding = 20
-
+                gravity = Gravity.CENTER
                 textView(batchName) {
                     textSize = dip(20).toFloat()
                     width = MATCH_PARENT
+                    textColor = Color.BLACK
+                    gravity = Gravity.CENTER
                 }
 
                 linearLayout {

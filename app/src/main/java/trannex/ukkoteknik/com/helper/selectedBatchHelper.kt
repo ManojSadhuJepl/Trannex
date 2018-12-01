@@ -110,4 +110,19 @@ object SelectedBatchHandler {
                 ?.eq("created_at", MyApp.getDate())
                 ?.countOf()!! > 0
     }
+
+    fun isActivityTaken(contentId: Int): Boolean {
+        val programData = programData()
+        return MyApp.mDatabaseHelper.getVideoAndInteractiveDao()
+                ?.queryBuilder()
+                ?.where()
+                ?.eq("trnx_batch_id", programData["batch_id"].int)
+                ?.and()
+                ?.eq("trnx_batch_programs_id", programData["id"].int)
+                ?.and()
+                ?.eq("trnx_content_id", contentId)
+                ?.and()
+                ?.eq("created_at", MyApp.getDate())
+                ?.countOf()!! > 0
+    }
 }

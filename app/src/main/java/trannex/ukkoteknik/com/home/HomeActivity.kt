@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
@@ -206,20 +207,19 @@ class HomeActivity : AppCompatActivity() {
 
             for ((index, children) in customChildren.withIndex()) {
 
-                var content: JsonObject? = null
-                if (!children.obj.has("contentType"))
-                    content = SelectedBatchHandler.getContentFromId(JsonParser().parse(children["asset"].string)["id"].int);
-                else {
-                    content = children.obj
+                var contentId: Int? = null
+                var content: JsonObject = children.obj
+                if (children.obj.has("asset")) {
+                    contentId = JsonParser().parse(children["asset"].string)["id"].int
+                    //content = SelectedBatchHandler.getContentFromId(contentId)
                 }
 
                 //val content = SelectedBatchHandler.getContentFromId(JsonParser().parse(children["asset"].string)["id"].int)
-                if (content != null)
+                if (content != null) {
                     activityRow(content["name"].string,
                             content["contentType"].string,
                             if (content.has("duration")) content["duration"].string else "NA",
-                            "Completed").margins(bottom = 2).onClick {
-
+                            getCompletionStatus(content["contentType"].string, contentId)).margins(bottom = 2).onClick {
                         fun startPlayer() {
                             startActivity<PlayerActivity>("index" to index, "contentChildren" to customChildren.toString())
                             overridePendingTransition(R.anim.bottom_enter, R.anim.no_anim)
@@ -260,32 +260,19 @@ class HomeActivity : AppCompatActivity() {
                             toast("Please take attendance to proceed.")
                         }
                     }
+                }
             }
+        }
+    }
 
-            /*activityRow("Intro ", Constants.ATTENDANCE, "--", "Completed").margins(bottom = 2).onClick {
-                startActivity<PlayerActivity>("type" to Constants.ATTENDANCE)
-                overridePendingTransition(R.anim.bottom_enter, R.anim.no_anim)
-            }
-            activityRow("Intro ", Constants.PPT, "--", "Completed").margins(bottom = 2).onClick {
-                startActivity<PlayerActivity>("type" to Constants.PPT)
-                overridePendingTransition(R.anim.bottom_enter, R.anim.no_anim)
-            }
-            activityRow("Intro ", Constants.PDF, "--", "Completed").margins(bottom = 2).onClick {
-                startActivity<PlayerActivity>("type" to Constants.PDF)
-                overridePendingTransition(R.anim.bottom_enter, R.anim.no_anim)
-            }
-            activityRow("Pre test", Constants.INTERACTIVE, "Duration", "Pending").margins(bottom = 2).onClick {
-                startActivity<PlayerActivity>("type" to Constants.INTERACTIVE)
-                overridePendingTransition(R.anim.bottom_enter, R.anim.no_anim)
-            }
-            activityRow("health", Constants.VIDEO, "Duration", "Completed").margins(bottom = 2).onClick {
-                startActivity<PlayerActivity>("type" to Constants.VIDEO)
-                overridePendingTransition(R.anim.bottom_enter, R.anim.no_anim)
-            }
-            activityRow("health", Constants.FEEDBACK, "Duration", "Completed").margins(bottom = 2).onClick {
-                startActivity<PlayerActivity>("type" to Constants.FEEDBACK)
-                overridePendingTransition(R.anim.bottom_enter, R.anim.no_anim)
-            }*/
+    fun getCompletionStatus(type: String, contentId: Int?): String {
+        Log.i("contentId", "" + contentId)
+        return when (type) {
+            Constants.ATTENDANCE -> if (SelectedBatchHandler.isAttendanceTaken()) "Completed" else "Not Completed"
+            Constants.PRE_TEST -> if (SelectedBatchHandler.isPreTestTaken()) "Completed" else "Not Completed"
+            Constants.POST_TEST -> if (SelectedBatchHandler.isPostTestTaken()) "Completed" else "Not Completed"
+            Constants.FEEDBACK -> if (SelectedBatchHandler.isFeedbackTaken()) "Completed" else "Not Completed"
+            else -> if (SelectedBatchHandler.isActivityTaken(contentId!!)) "Completed" else "Not Completed"
         }
     }
 
@@ -305,7 +292,6 @@ class HomeActivity : AppCompatActivity() {
         makeBreadCrumb(0)
     }
 
-
     override fun onBackPressed() {
         if (currentActive == activitiesLayout) {
             programLayout.visibility = VISIBLE
@@ -315,17 +301,10 @@ class HomeActivity : AppCompatActivity() {
 
             currentActive = programLayout
             makeBreadCrumb(1)
-            //resetScroll()
         } else {
             super.onBackPressed()
         }
     }
-
-    /*private fun resetScroll() {
-        scrollView.postDelayed({
-            scrollView.arrowScroll(HorizontalScrollView.FOCUS_LEFT)
-        }, 300)
-    }*/
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == android.R.id.home)
@@ -335,7 +314,9 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        attachPrograms()
+        if (programLayout.visibility == VISIBLE)
+            attachPrograms()
+        else if (activitiesLayout.visibility == VISIBLE)
+            attachActivities()
     }
-
 }

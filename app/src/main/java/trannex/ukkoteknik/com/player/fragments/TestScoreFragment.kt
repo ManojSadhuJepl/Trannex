@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.InputType
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,6 @@ import com.google.gson.JsonObject
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.alert
 import trannex.ukkoteknik.com.R
 import trannex.ukkoteknik.com.entities.Attendee
 import trannex.ukkoteknik.com.entities.FeedbackAndTest
@@ -22,7 +22,6 @@ import trannex.ukkoteknik.com.extensions.buttonCustom
 import trannex.ukkoteknik.com.extensions.margins
 import trannex.ukkoteknik.com.helper.SelectedBatchHandler
 import trannex.ukkoteknik.com.player.PlayerActivity
-import trannex.ukkoteknik.com.singleton.Constants
 import trannex.ukkoteknik.com.singleton.MyApp
 import trannex.ukkoteknik.com.utils.DeviceIdUtils
 
@@ -107,12 +106,13 @@ class TestScoreFragment : Fragment() {
                     .lparams(weight = 1f, width = 0).textSize = 20f
 
             if (isTitle) {
-                textView("Attendance")
+                textView("Score")
                         .lparams(weight = 1f, width = 0).textSize = 20f
             } else {
                 editText = editText {
                     textSize = 20f
                     tag = attendee.id
+                    inputType = InputType.TYPE_CLASS_NUMBER
                     /*if (previousAttendance != null)
                         isChecked = previousAttendance!!.contains(attendee.id.toString())*/
                 }.lparams(weight = 1f, width = 0) {
@@ -120,27 +120,6 @@ class TestScoreFragment : Fragment() {
                 }
             }
 
-            textView(if (isTitle) "Action" else "View Details") {
-                onClick {
-                    alert {
-                        title = "Details"
-                        customView {
-                            verticalLayout {
-                                attendee.first_name?.let { textView("First name: " + attendee.first_name) }
-                                attendee.middle_name?.let { textView("Middle name: " + attendee.middle_name) }
-                                attendee.last_name?.let { textView("Last name: " + attendee.last_name) }
-                                attendee.gender?.let { textView("Gender " + attendee.gender) }
-                                attendee.email?.let { textView("Email " + attendee.email) }
-                                attendee.phone?.let { textView("phone " + attendee.phone) }
-                            }
-                        }
-                        yesButton {
-                            text = "OK"
-                        }
-                    }.show()
-                }
-            }
-                    .lparams(weight = 1f, width = 0).textSize = 20f
         }
         return layout to editText
 

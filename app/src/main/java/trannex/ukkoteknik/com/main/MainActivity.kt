@@ -1,18 +1,26 @@
 package trannex.ukkoteknik.com.main
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.HorizontalScrollView
+import android.widget.LinearLayout
 import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import org.jetbrains.anko.*
+import org.jetbrains.anko.appcompat.v7.toolbar
+import org.jetbrains.anko.design.appBarLayout
 import org.quanqi.circularprogress.CircularProgressView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import trannex.ukkoteknik.com.R
+import trannex.ukkoteknik.com.commons.Footer
 import trannex.ukkoteknik.com.entities.Asset
 import trannex.ukkoteknik.com.entities.Batches
 import trannex.ukkoteknik.com.extensions.asyncExtension
@@ -26,7 +34,8 @@ import trannex.ukkoteknik.com.utils.writeResponseBodyToDisk
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
-    lateinit var rootView: HorizontalScrollView
+    lateinit var rootView: LinearLayout
+    lateinit var contentView: HorizontalScrollView
     val logger = AnkoLogger<MainActivity>()
     lateinit var assetsDir: File
 
@@ -37,13 +46,54 @@ class MainActivity : AppCompatActivity() {
             assetsDir.mkdir()
         }
 
-        rootView = horizontalScrollView {
-            isFillViewport = true
-            linearLayout {
-                gravity = Gravity.CENTER
-                addView(CircularProgressView(this@MainActivity).lparams(width = 40, height = 40))
+/*        val actionBar = supportActionBar
+        actionBar!!.alp
+        actionBar!!.setBackgroundDrawable(resources.getDrawable(R.drawable.appbar))*/
+
+        rootView = verticalLayout {
+
+            appBarLayout {
+                backgroundColor = Color.parseColor("#ffffff")
+                alpha = 0.5f
+                toolbar {
+                    verticalLayout {
+                        gravity = Gravity.CENTER
+                        textView("Trannex") {
+                            textSize = 25f
+                            textColor = Color.parseColor("#000000")
+                            padding = 3
+                        }
+                    }
+                }
             }
+
+            backgroundResource = R.drawable.background
+
+            /*val appbar = AppBar(this@verticalLayout)
+            val params1 = appbar.view.layoutParams as LinearLayout.LayoutParams
+            params1.apply {
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+                height = dip(50)
+            }
+            appbar.view.layoutParams = params1*/
+
+            contentView = horizontalScrollView {
+                isFillViewport = true
+                linearLayout {
+                    gravity = Gravity.CENTER
+                    addView(CircularProgressView(this@MainActivity).lparams(width = 40, height = 40))
+                }
+            }.lparams(height = 0, weight = 1f)
+            val footer = Footer(this@verticalLayout)
+            val params2 = footer.view.layoutParams as LinearLayout.LayoutParams
+            params2.apply {
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+                height = dip(50)
+            }
+
+            footer.view.layoutParams = params2
         }
+
 
         setContentView(rootView)
 
@@ -76,9 +126,9 @@ class MainActivity : AppCompatActivity() {
         val batchesList = MyApp.mDatabaseHelper.getBatchesDao()?.queryForAll()
         if (batchesList?.size!! > 0) {
             SelectedBatchHandler.batches = JsonParser().parse(batchesList[0].data).array
-            rootView.removeAllViews()
+            contentView.removeAllViews()
 
-            rootView.linearLayout {
+            contentView.linearLayout {
                 gravity = Gravity.CENTER
 
                 val fileIdsInAppDir = assetsDir.listFiles().map { it.name.toInt() }
