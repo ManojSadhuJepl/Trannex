@@ -12,6 +12,8 @@ import android.widget.LinearLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 import org.jetbrains.anko.sdk27.coroutines.onClick
+import trannex.ukkoteknik.com.R
+import trannex.ukkoteknik.com.extensions.buttonCustom
 import trannex.ukkoteknik.com.extensions.margins
 import trannex.ukkoteknik.com.helper.SelectedBatchHandler
 import trannex.ukkoteknik.com.intro.IntroActivity
@@ -43,7 +45,7 @@ fun ViewGroup.programCard(activity: Activity,
             cardView {
                 radius = 50f
                 textView(program) {
-                    textColor = Color.parseColor("#00a7d0")
+                    textColorResource = R.color.blue
                     textSize = dip(25).toFloat()
                     width = MATCH_PARENT
                     backgroundColor = Color.parseColor("#000000")
@@ -52,7 +54,7 @@ fun ViewGroup.programCard(activity: Activity,
                     gravity = Gravity.CENTER
                 }
 
-            }.lparams(width = 100, height = 100).margins(top = 10, bottom = 10)
+            }.lparams(width = 100, height = 100).margins(top = 10, bottom = 5)
 
             verticalLayout {
                 padding = 20
@@ -62,38 +64,46 @@ fun ViewGroup.programCard(activity: Activity,
                     width = MATCH_PARENT
                     textColor = Color.BLACK
                     gravity = Gravity.CENTER
-                }
+                }.margins(bottom = 5)
 
                 linearLayout {
                     padding = 7
-                    backgroundColor = Color.parseColor("#f5f5f5")
+                    backgroundColorResource = R.color.black_opacity
 
                     textView("Location") {
                         textSize = dip(20).toFloat()
                         setTypeface(null, Typeface.BOLD)
                         width = dip(270)
+                        textColor = Color.WHITE
                     }
                     textView(location) {
                         textSize = dip(20).toFloat()
                         width = dip(180)
+                        textColor = Color.WHITE
                     }
                 }
 
                 linearLayout {
                     padding = 7
+                    backgroundColorResource = R.color.black
                     textView("Duration") {
                         textSize = dip(20).toFloat()
                         setTypeface(null, Typeface.BOLD)
                         width = dip(270)
+                        textColor = Color.WHITE
                     }
                     textView(duration) {
                         textSize = dip(20).toFloat()
                         width = dip(180)
+                        textColor = Color.WHITE
                     }
                 }
 
-                button(if (isContainsAssets) "Execute" else "Download") {
+                buttonCustom(if (isContainsAssets) "Execute" else "Download").apply {
                     gravity = Gravity.CENTER
+                    this@verticalLayout.gravity = Gravity.END
+                    backgroundResource = R.drawable.button
+                    textColor = Color.WHITE
                 }.margins(top = 10).onClick {
                     if (isContainsAssets) {
                         SelectedBatchHandler.index = index

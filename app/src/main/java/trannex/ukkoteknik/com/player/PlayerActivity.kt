@@ -6,11 +6,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.RatingBar
 import android.widget.RelativeLayout
 import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonArray
@@ -21,17 +18,11 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import trannex.ukkoteknik.com.R
 import trannex.ukkoteknik.com.commons.Footer
-import trannex.ukkoteknik.com.entities.FeedbackAndTest
 import trannex.ukkoteknik.com.extensions.margins
 import trannex.ukkoteknik.com.extensions.replaceFragment
 import trannex.ukkoteknik.com.helper.SelectedBatchHandler
-import trannex.ukkoteknik.com.player.fragments.AttendanceFragment
-import trannex.ukkoteknik.com.player.fragments.TestFragment
-import trannex.ukkoteknik.com.player.fragments.VideoFragment
-import trannex.ukkoteknik.com.player.fragments.WebFragment
+import trannex.ukkoteknik.com.player.fragments.*
 import trannex.ukkoteknik.com.singleton.Constants
-import trannex.ukkoteknik.com.singleton.MyApp
-import trannex.ukkoteknik.com.utils.DeviceIdUtils
 import java.io.File
 
 class PlayerActivity : AppCompatActivity() {
@@ -167,7 +158,8 @@ class PlayerActivity : AppCompatActivity() {
                     replaceFragment(TestFragment().apply { data(content, content["contentType"].string) }, R.id.playerView)
                 }
                 Constants.FEEDBACK -> {
-                    var ratingBar: RatingBar? = null
+                    replaceFragment(FeedbackFragment().apply { data(content) }, R.id.playerView)
+                    /*var ratingBar: RatingBar? = null
                     alert {
                         isCancelable = false
                         customView {
@@ -192,7 +184,7 @@ class PlayerActivity : AppCompatActivity() {
                             ))
                             onBackPressed()
                         }
-                    }.show()
+                    }.show()*/
                 }
             }
     }

@@ -1,5 +1,6 @@
 package trannex.ukkoteknik.com.intro
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -39,7 +40,9 @@ class IntroActivity : AppCompatActivity() {
 
         fadeinAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
 
-        rootView = frameLayout()
+        rootView = frameLayout() {
+            backgroundResource = R.drawable.background
+        }
         setContentView(rootView)
 
         rootView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -61,6 +64,7 @@ class IntroActivity : AppCompatActivity() {
 
                     oppertunity = imageView {
                         setImageResource(R.drawable.oppertunity)
+                        backgroundColor = Color.WHITE
                     }.lparams {
                         width = 300
                         height = 100
@@ -70,6 +74,7 @@ class IntroActivity : AppCompatActivity() {
 
                     ukkoteknok = imageView {
                         setImageResource(R.drawable.ukkoteknik)
+                        backgroundColor = Color.WHITE
                     }.lparams {
                         width = 300
                         height = 100
@@ -91,6 +96,7 @@ class IntroActivity : AppCompatActivity() {
                     videoLayout = linearLayout {
                         gravity = Gravity.CENTER
                         visibility = GONE
+                        alpha = 0.8f
                         cardView {
                             backgroundResource = R.drawable.intro_video_thumbnail1
                             radius = 15f

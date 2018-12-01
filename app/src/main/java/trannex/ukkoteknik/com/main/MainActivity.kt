@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         actionBar!!.setBackgroundDrawable(resources.getDrawable(R.drawable.appbar))*/
 
         rootView = verticalLayout {
+            gravity = Gravity.CENTER_HORIZONTAL
 
             appBarLayout {
                 backgroundColor = Color.parseColor("#ffffff")

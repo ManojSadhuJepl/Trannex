@@ -1,7 +1,9 @@
 package trannex.ukkoteknik.com.player.fragments
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.Gravity
@@ -38,28 +40,54 @@ class AttendanceFragment : Fragment() {
 
         playerActivity = activity as PlayerActivity
 
-        //previousAttendance = attendanceDao?.queryForId(content["id"].string)?.data?.let { MyApp.gson.fromJson(it) }
+        //previousAttendance = feedbackDao?.queryForId(content["id"].string)?.data?.let { MyApp.gson.fromJson(it) }
 
         return UI {
             scrollView {
                 padding = dip(50)
                 verticalLayout {
-                    userRow(true).first.margins(bottom = dip(2))
+                    userRow(true).first.margins(bottom = dip(2)).apply {
+                        alpha = 0.8f
+                        backgroundColor = R.color.colorPrimary
+                    }
+                    var color = true
                     for (attendee in SelectedBatchHandler.attendees()) {
                         val pair = userRow(isTitle = false,
                                 attendeeJson = attendee.obj)
 
+                        pair.first.apply {
+                            alpha = 0.8f
+                            backgroundResource = if (color) R.color.black_opacity else R.color.black
+                            color = !color
+                        }
                         pair.first.margins(bottom = dip(2))
                         cbList.add(pair.second!!)
                     }
 
-                    buttonCustom(R.string.save).onClick {
-                        save()
-                    }
-                    //buttonCustom(R.string.saveSyncMove)
-                    buttonCustom(R.string.cancel).margins(bottom = dip(50)).onClick {
-                        playerActivity.onBackPressed()
-                    }
+                    linearLayout {
+                        gravity = Gravity.END
+                        backgroundColorResource = android.R.color.transparent
+
+                        buttonCustom(R.string.save).apply {
+                            gravity = Gravity.CENTER
+                            this@verticalLayout.gravity = Gravity.END
+                            backgroundResource = R.drawable.button
+                            textColor = Color.WHITE
+                        }.onClick {
+                            save()
+                        }
+                        //buttonCustom(R.string.saveSyncMove)
+                        buttonCustom(R.string.cancel).apply {
+                            gravity = Gravity.CENTER
+                            this@verticalLayout.gravity = Gravity.END
+                            backgroundResource = R.drawable.button
+                            textColor = Color.WHITE
+                        }.margins(bottom = 50, left = 20).onClick {
+                            playerActivity.onBackPressed()
+                        }
+                    }.margins(top = 10)
+
+                    backgroundColorResource = android.R.color.transparent
                 }
             }
         }.view
@@ -93,30 +121,18 @@ class AttendanceFragment : Fragment() {
         var checkBox: CheckBox? = null
         val layout = linearLayout {
             padding = 10
-            backgroundColor = Color.parseColor("#00a7d0")
+            //backgroundColor = Color.parseColor("#00a7d0")
             weightSum = 4f
 
 
-            textView(if (isTitle) "ID" else attendee.id.toString())
-                    .lparams(weight = 1f, width = 0).textSize = 20f
-            textView(if (isTitle) "Name" else attendee.first_name + attendee.last_name)
-                    .lparams(weight = 1f, width = 0).textSize = 20f
+            textView(if (isTitle) "ID" else attendee.id.toString()) {
+                textSize = 20f
+                textColor = Color.WHITE
+            }.lparams(weight = 1f, width = 0)
+            textView(if (isTitle) "Name" else attendee.first_name + attendee.last_name) {
+                textSize = 20f
+                textColor = Color.WHITE
 
-            if (isTitle) {
-                textView("Attendance")
-                        .lparams(weight = 1f, width = 0).textSize = 20f
-            } else {
-                checkBox = checkBox {
-                    textSize = 20f
-                    tag = attendee.id
-                    /*if (previousAttendance != null)
-                        isChecked = previousAttendance!!.contains(attendee.id.toString())*/
-                }.lparams(weight = 1f, width = 0) {
-                    gravity = Gravity.CENTER
-                }
-            }
-
-            textView(if (isTitle) "Action" else "View Details") {
                 onClick {
                     alert {
                         title = "Details"
@@ -135,8 +151,27 @@ class AttendanceFragment : Fragment() {
                         }
                     }.show()
                 }
+
+            }.lparams(weight = 1f, width = 0)
+
+            if (isTitle) {
+                textView("Attendance") {
+                    textSize = 20f
+                    textColor = Color.WHITE
+                }.lparams(weight = 1f, width = 0)
+            } else {
+                checkBox = checkBox {
+                    textSize = 20f
+                    tag = attendee.id
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        buttonTintList = ColorStateList.valueOf(resources.getColor(android.R.color.white))
+                    }
+                    /*if (previousAttendance != null)
+                        isChecked = previousAttendance!!.contains(attendee.id.toString())*/
+                }.lparams(weight = 1f, width = 0) {
+                    gravity = Gravity.CENTER
+                }
             }
-                    .lparams(weight = 1f, width = 0).textSize = 20f
         }
         return layout to checkBox
 

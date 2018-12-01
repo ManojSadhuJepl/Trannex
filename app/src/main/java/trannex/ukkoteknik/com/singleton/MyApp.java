@@ -4,8 +4,6 @@ import android.app.Application;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +26,6 @@ public class MyApp extends Application {
     public static Gson gson;
     public static MyApp instance;
     public static DatabaseHelper mDatabaseHelper;
-    public JsonArray batches;
 
     public static Timestamp getCurrentTimeStamp() {
         Timestamp timestamp = new Timestamp(Calendar.getInstance(Locale.ENGLISH).getTimeInMillis());
@@ -37,10 +34,10 @@ public class MyApp extends Application {
 
     public static Date getDate() {
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, 10);
+        /*c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);*/
         return new Date(c.getTimeInMillis());
     }
 
@@ -50,11 +47,10 @@ public class MyApp extends Application {
         instance = this;
 
         gson = new GsonBuilder().setExclusionStrategies(new AnnotationExclusionStrategy())
-                .setDateFormat("MM/dd/yyyy hh:mm:ss").create();
+                .setDateFormat(Constants.TIMESTAMP_FORMAT).create();
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
 
-        batches = new JsonParser().parse(loadJSONFromAsset("sample.json")).getAsJsonArray();
         mDatabaseHelper = new DatabaseHelper(this, "Trannex.db");
 
     }

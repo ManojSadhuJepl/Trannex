@@ -3,6 +3,7 @@ package trannex.ukkoteknik.com.entities
 import com.google.gson.annotations.SerializedName
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
+import trannex.ukkoteknik.com.singleton.Constants
 import trannex.ukkoteknik.com.singleton.MyApp
 import trannex.ukkoteknik.com.utils.Exclude
 import java.sql.Date
@@ -57,7 +58,7 @@ data class Attendance(
         @Exclude
         @DatabaseField
         var syncStatus: Int,
-        @DatabaseField
+        @DatabaseField(format = Constants.TIMESTAMP_FORMAT)
         var created_at: Date = MyApp.getDate(),
         @DatabaseField
         var created_by: Int = 1
@@ -85,7 +86,7 @@ data class FeedbackAndTest(
         @Exclude
         @DatabaseField
         var syncStatus: Int,
-        @DatabaseField
+        @DatabaseField(format = Constants.TIMESTAMP_FORMAT)
         var created_at: Date = MyApp.getDate(),
         @DatabaseField
         var created_by: Int = 1
@@ -115,7 +116,7 @@ data class VideoAndInteractive(
         @Exclude
         @DatabaseField
         var syncStatus: Int,
-        @DatabaseField
+        @DatabaseField(format = Constants.TIMESTAMP_FORMAT)
         var created_at: Date = MyApp.getDate(),
         @DatabaseField
         var created_by: Int = 1

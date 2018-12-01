@@ -4,6 +4,7 @@ import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import trannex.ukkoteknik.com.extensions.equalString
 import trannex.ukkoteknik.com.singleton.Constants
 import trannex.ukkoteknik.com.singleton.MyApp
 
@@ -61,9 +62,12 @@ object SelectedBatchHandler {
                 ?.eq("trnx_batch_id", programData["batch_id"].int)
                 ?.and()
                 ?.eq("trnx_batch_programs_id", programData["id"].int)
-                ?.and()
-                ?.eq("created_at", MyApp.getDate())
-                ?.countOf()!! > 0
+                ?.query()
+                ?.filter {
+                    it.created_at.equalString(MyApp.getDate())
+                }!!.isNotEmpty()
+        /*?.and()
+        ?.eq("created_at", MyApp.getDate())*/
     }
 
     fun isPreTestTaken(): Boolean {
@@ -76,9 +80,10 @@ object SelectedBatchHandler {
                 ?.eq("trnx_batch_programs_id", programData["id"].int)
                 ?.and()
                 ?.eq("type", Constants.PRE_TEST)
-                ?.and()
-                ?.eq("created_at", MyApp.getDate())
-                ?.countOf()!! > 0
+                ?.query()
+                ?.filter {
+                    it.created_at.equalString(MyApp.getDate())
+                }!!.isNotEmpty()
     }
 
     fun isPostTestTaken(): Boolean {
@@ -91,9 +96,10 @@ object SelectedBatchHandler {
                 ?.eq("trnx_batch_programs_id", programData["id"].int)
                 ?.and()
                 ?.eq("type", Constants.POST_TEST)
-                ?.and()
-                ?.eq("created_at", MyApp.getDate())
-                ?.countOf()!! > 0
+                ?.query()
+                ?.filter {
+                    it.created_at.equalString(MyApp.getDate())
+                }!!.isNotEmpty()
     }
 
     fun isFeedbackTaken(): Boolean {
@@ -106,9 +112,10 @@ object SelectedBatchHandler {
                 ?.eq("trnx_batch_programs_id", programData["id"].int)
                 ?.and()
                 ?.eq("type", Constants.FEEDBACK)
-                ?.and()
-                ?.eq("created_at", MyApp.getDate())
-                ?.countOf()!! > 0
+                ?.query()
+                ?.filter {
+                    it.created_at.equalString(MyApp.getDate())
+                }!!.isNotEmpty()
     }
 
     fun isActivityTaken(contentId: Int): Boolean {
@@ -121,8 +128,9 @@ object SelectedBatchHandler {
                 ?.eq("trnx_batch_programs_id", programData["id"].int)
                 ?.and()
                 ?.eq("trnx_content_id", contentId)
-                ?.and()
-                ?.eq("created_at", MyApp.getDate())
-                ?.countOf()!! > 0
+                ?.query()
+                ?.filter {
+                    it.created_at.equalString(MyApp.getDate())
+                }!!.isNotEmpty()
     }
 }

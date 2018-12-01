@@ -14,6 +14,9 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import org.jetbrains.anko.dip
+import trannex.ukkoteknik.com.singleton.Constants
+import java.sql.Date
+import java.text.SimpleDateFormat
 
 /**
  * Created by  Manoj Sadhu on 9/25/2018.
@@ -38,7 +41,7 @@ fun View.padding(all: Int = 0, left: Int = 0, top: Int = 0, right: Int = 0, bott
     return this;
 }
 
-fun ViewGroup.buttonCustom(resourceID: Int): Button {
+fun ViewGroup.buttonCustom(resource: Any): Button {
 
     val params = when (this) {
         is LinearLayout ->
@@ -56,7 +59,10 @@ fun ViewGroup.buttonCustom(resourceID: Int): Button {
     }
 
     val button = Button(this.context).apply {
-        setText(resourceID)
+        if (resource is Int)
+            setText(resource)
+        if (resource is String)
+            setText(resource)
         layoutParams = params
     }
     addView(button)
@@ -70,6 +76,14 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
 
 fun Fragment.replaceChildFragment(fragment: Fragment, frameId: Int) {
     childFragmentManager.inTransaction { replace(frameId, fragment) }
+}
+
+fun Date.equalString(date: Date): Boolean {
+    val dateFormat = SimpleDateFormat(Constants.TIMESTAMP_FORMAT)
+    val thisTime = dateFormat.format(this).split(" ")[0]
+    val dateTime = dateFormat.format(date).split(" ")[0]
+
+    return thisTime == dateTime
 }
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {

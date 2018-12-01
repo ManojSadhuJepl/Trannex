@@ -25,6 +25,7 @@ import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import trannex.ukkoteknik.com.R
 import trannex.ukkoteknik.com.extensions.margins
+import trannex.ukkoteknik.com.extensions.padding
 import trannex.ukkoteknik.com.helper.SelectedBatchHandler
 import trannex.ukkoteknik.com.main.MainActivity
 import trannex.ukkoteknik.com.player.PlayerActivity
@@ -60,13 +61,16 @@ class HomeActivity : AppCompatActivity() {
 
         setContentView(
                 verticalLayout {
+                    backgroundResource = R.drawable.background
                     appBarLayout {
+                        backgroundColor = Color.parseColor("#ffffff")
+                        alpha = 0.5f
                         toolbar = toolbar {
                             verticalLayout {
-                                backgroundColor = Color.parseColor("#3F51B5")
+                                //backgroundColor = Color.parseColor("#3F51B5")
                                 textView(intent.getStringExtra("title")) {
                                     textSize = 20f
-                                    textColor = Color.parseColor("#ffffff")
+                                    textColor = Color.BLACK
                                     padding = 3
                                 }
 
@@ -118,7 +122,7 @@ class HomeActivity : AppCompatActivity() {
             for ((index, name) in breadCrumbList.withIndex()) {
                 textView("  $name  /") {
                     textSize = 20f
-                    textColor = Color.parseColor("#ffffff")
+                    textColor = Color.BLACK
                 }.onClick {
                     when (index) {
                         0 -> {
@@ -147,16 +151,26 @@ class HomeActivity : AppCompatActivity() {
     fun attachPrograms() {
         programLayout.removeAllViews()
         programLayout.verticalLayout {
-            programRow(true).margins(bottom = 2)
+            padding(all = 10)
+            programRow(true).margins(bottom = 2).apply {
+                alpha = 0.8f
+                backgroundColor = R.color.colorPrimary
+            }
 
             val programContentIndexChildren = SelectedBatchHandler.programContents();
 
+            var color = true
+
             for (months in programContentIndexChildren) {
                 for (day in months["children"].array) {
-                    programRow(false, day.asJsonObject).margins(bottom = 2).onClick {
+                    programRow(false, day.asJsonObject).apply {
+                        alpha = 0.8f
+                        backgroundResource = if (color) R.color.black_opacity else R.color.black
+                    }.margins(bottom = 2).onClick {
                         contentChildren = day["children"].array
                         programClicked(day["name"].string)
                     }
+                    color = !color
                 }
             }
         }
@@ -166,7 +180,10 @@ class HomeActivity : AppCompatActivity() {
         activitiesLayout.removeAllViews()
 
         activitiesLayout.verticalLayout {
-            activityRow("Name", "Type", "Duration", "Status").margins(bottom = 2)
+            activityRow("Name", "Type", "Duration", "Status").apply {
+                alpha = 0.8f
+                backgroundColor = R.color.colorPrimary
+            }.margins(bottom = 2)
 
             val customChildren = jsonArray()
 
@@ -205,8 +222,9 @@ class HomeActivity : AppCompatActivity() {
                     )
             )
 
-            for ((index, children) in customChildren.withIndex()) {
+            var color = true
 
+            for ((index, children) in customChildren.withIndex()) {
                 var contentId: Int? = null
                 var content: JsonObject = children.obj
                 if (children.obj.has("asset")) {
@@ -219,7 +237,11 @@ class HomeActivity : AppCompatActivity() {
                     activityRow(content["name"].string,
                             content["contentType"].string,
                             if (content.has("duration")) content["duration"].string else "NA",
-                            getCompletionStatus(content["contentType"].string, contentId)).margins(bottom = 2).onClick {
+                            getCompletionStatus(content["contentType"].string, contentId)).apply {
+                        alpha = 0.8f
+                        backgroundResource = if (color) R.color.black_opacity else R.color.black
+                        color = !color
+                    }.margins(bottom = 2).onClick {
                         fun startPlayer() {
                             startActivity<PlayerActivity>("index" to index, "contentChildren" to customChildren.toString())
                             overridePendingTransition(R.anim.bottom_enter, R.anim.no_anim)
