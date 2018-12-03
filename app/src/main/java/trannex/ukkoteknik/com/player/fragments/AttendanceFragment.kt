@@ -46,9 +46,9 @@ class AttendanceFragment : Fragment() {
             scrollView {
                 padding = dip(50)
                 verticalLayout {
-                    userRow(true).first.margins(bottom = dip(2)).apply {
-                        alpha = 0.8f
-                        backgroundColor = R.color.colorPrimary
+                    userRow(true).first.apply {
+                        //alpha = 0.8f
+                        backgroundColor = R.color.black_overlay
                     }
                     var color = true
                     for (attendee in SelectedBatchHandler.attendees()) {
@@ -56,11 +56,10 @@ class AttendanceFragment : Fragment() {
                                 attendeeJson = attendee.obj)
 
                         pair.first.apply {
-                            alpha = 0.8f
-                            backgroundResource = if (color) R.color.black_opacity else R.color.black
+                            //alpha = 0.8f
+                            backgroundResource = if (color) R.color.secondRow else R.color.white
                             color = !color
                         }
-                        pair.first.margins(bottom = dip(2))
                         cbList.add(pair.second!!)
                     }
 
@@ -125,11 +124,11 @@ class AttendanceFragment : Fragment() {
 
             textView(if (isTitle) "ID" else attendee.id.toString()) {
                 textSize = 20f
-                textColor = Color.WHITE
+                textColor = if (isTitle) Color.WHITE else Color.BLACK
             }.lparams(weight = 1f, width = 0)
             textView(if (isTitle) "Name" else attendee.first_name + attendee.last_name) {
                 textSize = 20f
-                textColor = Color.WHITE
+                textColor = if (isTitle) Color.WHITE else Color.BLACK
 
                 onClick {
                     dialog = alert {
@@ -143,7 +142,7 @@ class AttendanceFragment : Fragment() {
                                 }.lparams(width = MATCH_PARENT, height = 50)
                                 frameLayout {
                                     imageView(R.drawable.alert_background) {
-                                        alpha = 0.3f
+                                        //alpha = 0.3f
                                     }
                                     backgroundColorResource = R.color.popup
                                     scrollView {
@@ -233,9 +232,6 @@ class AttendanceFragment : Fragment() {
                 checkBox = checkBox {
                     textSize = 20f
                     tag = attendee.id
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        buttonTintList = ColorStateList.valueOf(resources.getColor(android.R.color.white))
-                    }
                 }.lparams(weight = 1f, width = 0) {
                     gravity = Gravity.CENTER
                 }

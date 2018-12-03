@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
@@ -16,6 +15,7 @@ import android.view.animation.AnimationUtils
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.TextView
 import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -25,7 +25,6 @@ import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import trannex.ukkoteknik.com.R
-import trannex.ukkoteknik.com.extensions.margins
 import trannex.ukkoteknik.com.extensions.padding
 import trannex.ukkoteknik.com.helper.SelectedBatchHandler
 import trannex.ukkoteknik.com.main.MainActivity
@@ -65,7 +64,7 @@ class HomeActivity : AppCompatActivity() {
                     backgroundResource = R.drawable.background
                     appBarLayout {
                         backgroundColor = Color.parseColor("#ffffff")
-                        alpha = 0.5f
+                        //alpha = 0.5f
                         toolbar = toolbar {
                             verticalLayout {
                                 //backgroundColor = Color.parseColor("#3F51B5")
@@ -119,7 +118,7 @@ class HomeActivity : AppCompatActivity() {
         breadCrumbList.subList(breadCrumbList.size - drop, breadCrumbList.size).clear()
 
 
-        breadCrumb.linearLayout {
+        val layout = breadCrumb.linearLayout {
             for ((index, name) in breadCrumbList.withIndex()) {
                 textView("  $name  /") {
                     textSize = 20f
@@ -147,15 +146,19 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
+        val textView: TextView = layout.getChildAt(layout.childCount - 1) as TextView
+        val text = textView.text.toString().replace("/", "")
+        textView.text = text
+        textView.textColorResource = R.color.blue
     }
 
     fun attachPrograms() {
         programLayout.removeAllViews()
         programLayout.verticalLayout {
             padding(all = 10)
-            programRow(true).margins(bottom = 2).apply {
-                alpha = 0.8f
-                backgroundColor = R.color.colorPrimary
+            programRow(true).apply {
+                //alpha = 0.8f
+                backgroundColor = R.color.black_overlay
             }
 
             val programContentIndexChildren = SelectedBatchHandler.programContents();
@@ -204,9 +207,9 @@ class HomeActivity : AppCompatActivity() {
                     val id = index
 
                     programRow(false, day.asJsonObject, activityStatus(jsonArray)).apply {
-                        alpha = 0.8f
-                        backgroundResource = if (color) R.color.black_opacity else R.color.black
-                    }.margins(bottom = 2).onClick {
+                        //alpha = 0.8f
+                        backgroundResource = if (color) R.color.secondRow else R.color.white
+                    }.onClick {
                         selectedDay = id
                         programClicked(day["name"].string)
                     }
@@ -234,10 +237,10 @@ class HomeActivity : AppCompatActivity() {
         activitiesLayout.removeAllViews()
 
         activitiesLayout.verticalLayout {
-            activityRow("Name", "Type", "Duration", "Status").apply {
-                alpha = 0.8f
-                backgroundColor = R.color.colorPrimary
-            }.margins(bottom = 2)
+            activityRow("Name", "Type", "Duration", "Status", "Executed date", true).apply {
+                //alpha = 0.8f
+                backgroundColor = R.color.black_overlay
+            }
             var color = true
 
             for ((index, children) in contentChildren[selectedDay]!!.withIndex()) {
@@ -247,14 +250,17 @@ class HomeActivity : AppCompatActivity() {
                     contentId = JsonParser().parse(children["asset"].string)["id"].int
                 }
                 if (content != null) {
+
+                    val pair = getCompletionData(content["contentType"].string, contentId)
+
                     activityRow(content["name"].string,
                             content["contentType"].string,
                             if (content.has("duration")) content["duration"].string else "NA",
-                            getCompletionStatus(content["contentType"].string, contentId)).apply {
-                        alpha = 0.8f
-                        backgroundResource = if (color) R.color.black_opacity else R.color.black
+                            if (pair.first) "Completed" else "Not completed", pair.second).apply {
+                        //alpha = 0.8f
+                        backgroundResource = if (color) R.color.secondRow else R.color.white
                         color = !color
-                    }.margins(bottom = 2).onClick {
+                    }.onClick {
                         fun startPlayer() {
                             startActivity<PlayerActivity>("index" to index, "contentChildren" to contentChildren[selectedDay]!!.toString())
                             overridePendingTransition(R.anim.bottom_enter, R.anim.no_anim)
@@ -264,7 +270,9 @@ class HomeActivity : AppCompatActivity() {
                             if (!SelectedBatchHandler.isAttendanceTaken()) {
                                 startPlayer()
                             } else {
-                                toast("Attendance is already taken.")
+                                alert("Attendance is already taken.") {
+                                    yesButton { }
+                                }.show()
                             }
                         } else if (SelectedBatchHandler.isAttendanceTaken()) {
                             when (content["contentType"].string) {
@@ -272,27 +280,41 @@ class HomeActivity : AppCompatActivity() {
                                     if (!SelectedBatchHandler.isPreTestTaken()) {
                                         startPlayer()
                                     } else {
-                                        toast("Pre test is already taken.")
+                                        alert("Pre test is already taken.") {
+                                            yesButton { }
+                                        }.show()
                                     }
                                 }
                                 Constants.POST_TEST -> {
+                                    if (!SelectedBatchHandler.isPreTestTaken()) {
+                                        alert("Pre test is required.") {
+                                            yesButton { }
+                                        }.show()
+                                        return@onClick
+                                    }
                                     if (!SelectedBatchHandler.isPostTestTaken()) {
                                         startPlayer()
                                     } else {
-                                        toast("Post test is already taken.")
+                                        alert("Post test is already taken.") {
+                                            yesButton { }
+                                        }.show()
                                     }
                                 }
                                 Constants.FEEDBACK -> {
                                     if (!SelectedBatchHandler.isFeedbackTaken()) {
                                         startPlayer()
                                     } else {
-                                        toast("Feedback is already taken.")
+                                        alert("Feedback is already taken.") {
+                                            yesButton { }
+                                        }.show()
                                     }
                                 }
                                 else -> startPlayer()
                             }
                         } else {
-                            toast("Please take attendance to proceed.")
+                            alert("Please take attendance to proceed.") {
+                                yesButton { }
+                            }.show()
                         }
                     }
                 }
@@ -319,13 +341,24 @@ class HomeActivity : AppCompatActivity() {
 
 
     fun getCompletionStatus(type: String, contentId: Int?): String {
-        Log.i("contentId", "" + contentId)
+        //Log.i("contentId", "" + contentId)
         return when (type) {
             Constants.ATTENDANCE -> if (SelectedBatchHandler.isAttendanceTaken()) "Completed" else "Not Completed"
             Constants.PRE_TEST -> if (SelectedBatchHandler.isPreTestTaken()) "Completed" else "Not Completed"
             Constants.POST_TEST -> if (SelectedBatchHandler.isPostTestTaken()) "Completed" else "Not Completed"
             Constants.FEEDBACK -> if (SelectedBatchHandler.isFeedbackTaken()) "Completed" else "Not Completed"
             else -> if (SelectedBatchHandler.isActivityTaken(contentId!!)) "Completed" else "Not Completed"
+        }
+    }
+
+    fun getCompletionData(type: String, contentId: Int?): Pair<Boolean, String> {
+        //Log.i("contentId", "" + contentId)
+        return when (type) {
+            Constants.ATTENDANCE -> SelectedBatchHandler.attendanceData()
+            Constants.PRE_TEST -> SelectedBatchHandler.preTestData()
+            Constants.POST_TEST -> SelectedBatchHandler.postTestData()
+            Constants.FEEDBACK -> SelectedBatchHandler.feedbackData()
+            else -> SelectedBatchHandler.activityData(contentId!!)
         }
     }
 

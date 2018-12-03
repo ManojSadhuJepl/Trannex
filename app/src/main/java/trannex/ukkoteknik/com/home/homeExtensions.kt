@@ -16,31 +16,35 @@ import org.jetbrains.anko.textView
  *
  */
 
-fun ViewGroup.activityRow(name: String, type: String, duration: String, status: String): ViewGroup {
+fun ViewGroup.activityRow(name: String, type: String, duration: String, status: String, exeDate: String, isTitle: Boolean = false): ViewGroup {
     return linearLayout {
         padding = 10
         //backgroundColor = Color.parseColor("#00a7d0")
 
-        weightSum = 6f
+        weightSum = 8f
 
         textView(name) {
             textSize = 20f
-            textColor = Color.WHITE
+            textColor = if (isTitle) Color.WHITE else Color.BLACK
             ellipsize = TextUtils.TruncateAt.END
             maxLines = 1
         }.lparams(weight = 3f, width = 0)
         textView(type) {
             textSize = 20f
-            textColor = Color.WHITE
+            textColor = if (isTitle) Color.WHITE else Color.BLACK
         }.lparams(weight = 1f, width = 0)
         textView(duration) {
             textSize = 20f
-            textColor = Color.WHITE
+            textColor = if (isTitle) Color.WHITE else Color.BLACK
         }.lparams(weight = 1f, width = 0)
         textView(status) {
             textSize = 20f
-            textColor = Color.WHITE
-        }.lparams(weight = 1f, width = 0)
+            textColor = if (isTitle) Color.WHITE else Color.BLACK
+        }.lparams(weight = 1.5f, width = 0)
+        textView(exeDate) {
+            textSize = 20f
+            textColor = if (isTitle) Color.WHITE else Color.BLACK
+        }.lparams(weight = 1.5f, width = 0)
     }
 }
 
@@ -52,22 +56,22 @@ fun ViewGroup.programRow(isTitle: Boolean, day: JsonObject = jsonObject(), statu
 
         textView(if (isTitle) "Planned Date" else day["name"].string) {
             textSize = 20f
-            textColor = Color.WHITE
+            textColor = if (isTitle) Color.WHITE else Color.BLACK
         }.lparams(weight = 1f, width = 0)
 
 /*
         textView(if (isTitle) "Executed Date" else "---") {
             textSize = 20f
-            textColor = Color.WHITE
+            textColor = Color.BLACK
         }.lparams(weight = 1f, width = 0)
 */
         textView(if (isTitle) "Status" else status) {
             textSize = 20f
-            textColor = Color.WHITE
+            textColor = if (isTitle) Color.WHITE else Color.BLACK
         }.lparams(weight = 1f, width = 0)
         textView(if (isTitle) "Action" else "Execute") {
             textSize = 20f
-            textColor = Color.WHITE
+            textColor = if (isTitle) Color.WHITE else Color.BLACK
         }.lparams(weight = 1f, width = 0)
     }
 }

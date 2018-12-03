@@ -1,7 +1,6 @@
 package trannex.ukkoteknik.com.player
 
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RatingBar
@@ -29,7 +28,7 @@ fun ViewGroup.question(title: String, rating: Float, ratingChange: (id: Float) -
             numStars = 5
             stepSize = 0.5f
             setRating(rating)
-            progressDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+            //progressDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
 
             onRatingBarChange { ratingBar, rating, fromUser -> ratingChange(rating) }
 

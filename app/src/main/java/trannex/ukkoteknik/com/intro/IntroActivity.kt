@@ -96,7 +96,7 @@ class IntroActivity : AppCompatActivity() {
                     videoLayout = linearLayout {
                         gravity = Gravity.CENTER
                         visibility = GONE
-                        alpha = 0.8f
+                        //alpha = 0.8f
                         cardView {
                             backgroundResource = R.drawable.intro_video_thumbnail1
                             radius = 15f

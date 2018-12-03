@@ -20,6 +20,7 @@ import org.jetbrains.anko.sdk27.coroutines.onCompletion
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.videoView
 import trannex.ukkoteknik.com.entities.VideoAndInteractive
+import trannex.ukkoteknik.com.extensions.margins
 import trannex.ukkoteknik.com.helper.SelectedBatchHandler
 import trannex.ukkoteknik.com.player.PlayerActivity
 import trannex.ukkoteknik.com.singleton.MyApp
@@ -52,7 +53,10 @@ class VideoFragment : Fragment() {
                     start()
                     onCompletion {
                     }
-                }.lparams(width = ViewGroup.LayoutParams.MATCH_PARENT, height = ViewGroup.LayoutParams.MATCH_PARENT)
+                }.apply {
+                    lparams(width = ViewGroup.LayoutParams.MATCH_PARENT, height = ViewGroup.LayoutParams.MATCH_PARENT)
+                    margins(bottom = 33)
+                }
             }
         }.view
 

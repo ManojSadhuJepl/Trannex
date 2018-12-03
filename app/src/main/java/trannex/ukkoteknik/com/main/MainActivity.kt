@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import com.github.salomonbrys.kotson.*
@@ -55,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
             appBarLayout {
                 backgroundColor = Color.parseColor("#ffffff")
-                alpha = 0.5f
+                //alpha = 0.5f
                 toolbar {
                     verticalLayout {
                         gravity = Gravity.CENTER
@@ -184,12 +183,13 @@ class MainActivity : AppCompatActivity() {
                     asyncExtension(backgroundHandler = {
                         assets.forEach {
                             if (it.type.contains("zip")) {
-                                downloadZip(it.name, it.id)
+                                if (!downloadZip(it.name, it.id))
+                                    return@forEach
                             } else {
-                                downloadVideo(it.name, it.id)
+                                if (!downloadVideo(it.name, it.id))
+                                    return@forEach
                             }
                         }
-
                     }, completeHandler = {
                         progress.dismiss()
                         complete()
@@ -212,21 +212,23 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun downloadVideo(fileName: String, assetId: Int) {
+    private fun downloadVideo(fileName: String, assetId: Int): Boolean {
         val videoResponse = MyApp.apiInterface.downloadZip(fileName)
         val response = videoResponse.execute()
         if (response.isSuccessful) {
             writeResponseBodyToDisk(response.body()!!, File(assetsDir, assetId.toString()))
         }
+        return response.isSuccessful
     }
 
 
-    private fun downloadZip(fileName: String, assetId: Int) {
+    private fun downloadZip(fileName: String, assetId: Int): Boolean {
         val videoResponse = MyApp.apiInterface.downloadZip(fileName)
         val response = videoResponse.execute()
         if (response.isSuccessful) {
             Decompress().init(response.body()!!.byteStream(), assetId.toString(), assetsDir.path)
         }
+        return response.isSuccessful
     }
 
     override fun onResume() {

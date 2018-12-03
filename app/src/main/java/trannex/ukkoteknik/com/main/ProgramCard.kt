@@ -38,7 +38,7 @@ fun ViewGroup.programCard(activity: Activity,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             elevation = 5f
         }
-        alpha = 0.8f
+        //alpha = 0.8f
 
         verticalLayout {
             gravity = Gravity.CENTER

@@ -24,7 +24,7 @@ class Footer(viewGroup: ViewGroup) {
         view = viewGroup.linearLayout {
             gravity = Gravity.CENTER
             backgroundColor = Color.parseColor("#ffffff")
-            alpha = 0.5f
+            //alpha = 0.5f
             textView("Designed and developed by") {
                 textColor = Color.parseColor("#000000")
             }
