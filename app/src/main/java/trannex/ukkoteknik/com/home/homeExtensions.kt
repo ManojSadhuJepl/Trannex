@@ -44,22 +44,24 @@ fun ViewGroup.activityRow(name: String, type: String, duration: String, status: 
     }
 }
 
-fun ViewGroup.programRow(isTitle: Boolean, day: JsonObject = jsonObject()): ViewGroup {
+fun ViewGroup.programRow(isTitle: Boolean, day: JsonObject = jsonObject(), status: String = "Not Completed"): ViewGroup {
     return linearLayout {
         padding = 10
         //backgroundColor = Color.parseColor("#00a7d0")
-        weightSum = 4f
+        weightSum = 3f
 
         textView(if (isTitle) "Planned Date" else day["name"].string) {
             textSize = 20f
             textColor = Color.WHITE
         }.lparams(weight = 1f, width = 0)
 
+/*
         textView(if (isTitle) "Executed Date" else "---") {
             textSize = 20f
             textColor = Color.WHITE
         }.lparams(weight = 1f, width = 0)
-        textView(if (isTitle) "Status" else "---") {
+*/
+        textView(if (isTitle) "Status" else status) {
             textSize = 20f
             textColor = Color.WHITE
         }.lparams(weight = 1f, width = 0)

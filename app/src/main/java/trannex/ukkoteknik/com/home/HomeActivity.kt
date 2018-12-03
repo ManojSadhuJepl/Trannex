@@ -2,6 +2,7 @@ package trannex.ukkoteknik.com.home
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
@@ -46,8 +47,8 @@ class HomeActivity : AppCompatActivity() {
     lateinit var topExitAnimation: Animation
     lateinit var leftEnterAnimation: Animation
 
-    lateinit var contentChildren: JsonArray
-
+    val contentChildren = mutableMapOf<Int, JsonArray>()
+    var selectedDay: Int = 0
 
     val breadCrumbList = mutableListOf("My Programs", "Home")
 
@@ -161,19 +162,72 @@ class HomeActivity : AppCompatActivity() {
 
             var color = true
 
+            var index = 0
             for (months in programContentIndexChildren) {
                 for (day in months["children"].array) {
-                    programRow(false, day.asJsonObject).apply {
+
+                    val jsonArray = JsonArray()
+                    jsonArray.add(
+                            jsonObject(
+                                    "name" to Constants.ATTENDANCE,
+                                    "contentType" to Constants.ATTENDANCE,
+                                    "duration" to "NA"
+                            )
+                    )
+
+                    jsonArray.add(
+                            jsonObject(
+                                    "name" to Constants.PRE_TEST,
+                                    "contentType" to Constants.PRE_TEST,
+                                    "duration" to "NA"
+                            )
+                    )
+
+                    day["children"].array.forEach { jsonArray.add(it) }
+
+                    jsonArray.add(
+                            jsonObject(
+                                    "name" to Constants.POST_TEST,
+                                    "contentType" to Constants.POST_TEST,
+                                    "duration" to "NA"
+                            )
+                    )
+
+                    jsonArray.add(
+                            jsonObject(
+                                    "name" to Constants.FEEDBACK,
+                                    "contentType" to Constants.FEEDBACK,
+                                    "duration" to "NA"
+                            )
+                    )
+
+                    val id = index
+
+                    programRow(false, day.asJsonObject, activityStatus(jsonArray)).apply {
                         alpha = 0.8f
                         backgroundResource = if (color) R.color.black_opacity else R.color.black
                     }.margins(bottom = 2).onClick {
-                        contentChildren = day["children"].array
+                        selectedDay = id
                         programClicked(day["name"].string)
                     }
+                    contentChildren.put(index++, jsonArray)
                     color = !color
                 }
             }
         }
+    }
+
+    fun activityStatus(activityChildren: JsonArray): String {
+        var isCompleted = true
+        for (children in activityChildren) {
+            var contentId: Int? = null
+            var content: JsonObject = children.obj
+            if (children.obj.has("asset")) {
+                contentId = JsonParser().parse(children["asset"].string)["id"].int
+            }
+            isCompleted = isCompleted && (getCompletionStatus(content["contentType"].string, contentId) == "Completed")
+        }
+        return if (isCompleted) "Completed" else "Not Completed"
     }
 
     fun attachActivities() {
@@ -184,55 +238,14 @@ class HomeActivity : AppCompatActivity() {
                 alpha = 0.8f
                 backgroundColor = R.color.colorPrimary
             }.margins(bottom = 2)
-
-            val customChildren = jsonArray()
-
-            customChildren.add(
-                    jsonObject(
-                            "name" to Constants.ATTENDANCE,
-                            "contentType" to Constants.ATTENDANCE,
-                            "duration" to "NA"
-                    )
-            )
-
-            customChildren.add(
-                    jsonObject(
-                            "name" to Constants.PRE_TEST,
-                            "contentType" to Constants.PRE_TEST,
-                            "duration" to "NA"
-                    )
-            )
-
-            contentChildren.forEach { customChildren.add(it) }
-            //customChildren.add(contentChildren)
-
-            customChildren.add(
-                    jsonObject(
-                            "name" to Constants.POST_TEST,
-                            "contentType" to Constants.POST_TEST,
-                            "duration" to "NA"
-                    )
-            )
-
-            customChildren.add(
-                    jsonObject(
-                            "name" to Constants.FEEDBACK,
-                            "contentType" to Constants.FEEDBACK,
-                            "duration" to "NA"
-                    )
-            )
-
             var color = true
 
-            for ((index, children) in customChildren.withIndex()) {
+            for ((index, children) in contentChildren[selectedDay]!!.withIndex()) {
                 var contentId: Int? = null
                 var content: JsonObject = children.obj
                 if (children.obj.has("asset")) {
                     contentId = JsonParser().parse(children["asset"].string)["id"].int
-                    //content = SelectedBatchHandler.getContentFromId(contentId)
                 }
-
-                //val content = SelectedBatchHandler.getContentFromId(JsonParser().parse(children["asset"].string)["id"].int)
                 if (content != null) {
                     activityRow(content["name"].string,
                             content["contentType"].string,
@@ -243,7 +256,7 @@ class HomeActivity : AppCompatActivity() {
                         color = !color
                     }.margins(bottom = 2).onClick {
                         fun startPlayer() {
-                            startActivity<PlayerActivity>("index" to index, "contentChildren" to customChildren.toString())
+                            startActivity<PlayerActivity>("index" to index, "contentChildren" to contentChildren[selectedDay]!!.toString())
                             overridePendingTransition(R.anim.bottom_enter, R.anim.no_anim)
                         }
 
@@ -287,6 +300,24 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+/*
+    fun getExecutedDate(): String {
+        val programData = SelectedBatchHandler.programData()
+        val data = MyApp.mDatabaseHelper.getAttendanceDao()
+                ?.queryBuilder()
+                ?.where()
+                ?.eq("trnx_batch_id", programData["batch_id"].int)
+                ?.and()
+                ?.eq("trnx_batch_programs_id", programData["id"].int)
+                ?.queryForFirst()
+        return if (data == null) "---" else {
+            val dateFormat = SimpleDateFormat(Constants.TIMESTAMP_FORMAT)
+            return dateFormat.format(data.created_at).split(" ")[0]
+        }
+    }
+*/
+
+
     fun getCompletionStatus(type: String, contentId: Int?): String {
         Log.i("contentId", "" + contentId)
         return when (type) {
@@ -318,6 +349,11 @@ class HomeActivity : AppCompatActivity() {
         if (currentActive == activitiesLayout) {
             programLayout.visibility = VISIBLE
             programLayout.startAnimation(leftEnterAnimation)
+
+            Handler().postDelayed({
+                attachPrograms()
+            }, 500)
+
             activitiesLayout.visibility = GONE
             activitiesLayout.startAnimation(topExitAnimation)
 
@@ -336,9 +372,12 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (programLayout.visibility == VISIBLE)
-            attachPrograms()
-        else if (activitiesLayout.visibility == VISIBLE)
-            attachActivities()
+        Handler().postDelayed({
+            if (programLayout.visibility == VISIBLE) {
+                attachPrograms()
+            } else if (activitiesLayout.visibility == VISIBLE) {
+                attachActivities()
+            }
+        }, 100)
     }
 }

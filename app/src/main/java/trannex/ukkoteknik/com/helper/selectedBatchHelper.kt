@@ -54,6 +54,7 @@ object SelectedBatchHandler {
         }
     }
 
+
     fun isAttendanceTaken(): Boolean {
         val programData = programData()
         return MyApp.mDatabaseHelper.getAttendanceDao()

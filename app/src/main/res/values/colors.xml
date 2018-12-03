@@ -11,5 +11,6 @@
 
     <color name="black_opacity">#524b5c</color>
     <color name="green">#48e916</color>
+    <color name="popup">#3dcb72</color>
     <color name="blue">#00a7d0</color>
 </resources>

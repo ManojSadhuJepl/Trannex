@@ -50,9 +50,7 @@ class FeedbackFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         playerActivity = activity as PlayerActivity
-
         val attendees: List<Attendee> = MyApp.gson.fromJson(SelectedBatchHandler.attendees())
-
         attendees.forEach {
             feedbackData.put(it.id!!, jsonObject(
                     "faculty" to 0.0f,
@@ -77,7 +75,7 @@ class FeedbackFragment : Fragment() {
                             } else {
                                 selecteduserId = it
                                 feedbackData.get(selecteduserId)?.let {
-                                    facilityRatingBar.rating = it["faculty"].float
+                                    facultyRatingBar.rating = it["faculty"].float
                                     contentRatingBar.rating = it["content"].float
                                     facilityRatingBar.rating = it["facility"].float
                                     usefulnessRatingBar.rating = it["usefulness"].float
@@ -99,16 +97,13 @@ class FeedbackFragment : Fragment() {
                             //buttonCustom(R.string.saveSyncMove)
                             buttonCustom(R.string.cancel).apply {
                                 gravity = Gravity.CENTER
-                                backgroundResource = R.drawable.button
+                                backgroundResource = R.drawable.button_negative
                                 textColor = Color.WHITE
-                            }.onClick {
+                            }.margins(left = 7).onClick {
                                 playerActivity.onBackPressed()
                             }
                         }.margins(top = 10)
-
                     }
-
-
                 }.lparams(height = MATCH_PARENT, width = 0, weight = 1f)
                 scrollView {
                     padding = dip(50)
@@ -118,21 +113,25 @@ class FeedbackFragment : Fragment() {
                         }
                         faculty.first
                         facultyRatingBar = faculty.second
+
                         val content = question("Content", 0f) {
                             feedbackData.get(selecteduserId)!!["content"] = it
                         }
                         content.first
                         contentRatingBar = content.second
+
                         val facility = question("Facility", 0f) {
                             feedbackData.get(selecteduserId)!!["facility"] = it
                         }
                         facility.first
                         facilityRatingBar = facility.second
+
                         val usefulness = question("Usefulness", 0f) {
                             feedbackData.get(selecteduserId)!!["usefulness"] = it
                         }
                         usefulness.first
                         usefulnessRatingBar = usefulness.second
+
                         val overall = question("Overall", 0f) {
                             feedbackData.get(selecteduserId)!!["overall"] = it
                         }

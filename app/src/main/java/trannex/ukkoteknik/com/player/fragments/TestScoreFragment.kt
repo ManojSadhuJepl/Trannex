@@ -2,6 +2,7 @@ package trannex.ukkoteknik.com.player.fragments
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.InputType
@@ -42,22 +43,47 @@ class TestScoreFragment : Fragment() {
             scrollView {
                 padding = dip(50)
                 verticalLayout {
-                    userRow(true).first.margins(bottom = dip(2))
+                    userRow(true).first.margins(bottom = dip(2)).apply {
+                        alpha = 0.8f
+                        backgroundColor = R.color.colorPrimary
+                    }
+
+                    var color = true
                     for (attendee in SelectedBatchHandler.attendees()) {
                         val pair = userRow(isTitle = false,
                                 attendeeJson = attendee.obj)
 
+                        pair.first.apply {
+                            alpha = 0.8f
+                            backgroundResource = if (color) R.color.black_opacity else R.color.black
+                            color = !color
+                        }
                         pair.first.margins(bottom = dip(2))
                         etList.add(pair.second!!)
                     }
 
-                    buttonCustom(R.string.save).onClick {
-                        save()
-                    }
-                    //buttonCustom(R.string.saveSyncMove)
-                    buttonCustom(R.string.cancel).margins(bottom = dip(50)).onClick {
-                        playerActivity.onBackPressed()
-                    }
+                    linearLayout {
+                        gravity = Gravity.END
+                        backgroundColorResource = android.R.color.transparent
+
+                        buttonCustom(R.string.save).apply {
+                            gravity = Gravity.CENTER
+                            this@verticalLayout.gravity = Gravity.END
+                            backgroundResource = R.drawable.button
+                            textColor = Color.WHITE
+                        }.onClick {
+                            save()
+                        }
+                        //buttonCustom(R.string.saveSyncMove)
+                        buttonCustom(R.string.cancel).apply {
+                            gravity = Gravity.CENTER
+                            this@verticalLayout.gravity = Gravity.END
+                            backgroundResource = R.drawable.button_negative
+                            textColor = Color.WHITE
+                        }.margins(bottom = 50, left = 20).onClick {
+                            playerActivity.onBackPressed()
+                        }
+                    }.margins(top = 10)
                 }
             }
         }.view
@@ -70,13 +96,6 @@ class TestScoreFragment : Fragment() {
                     "attendeeId" to editText.tag,
                     "score" to editText.text.toString().trim()
             ))
-
-
-/*
-            if (editText.isChecked) {
-                attendanceData.add(editText.tag)
-            }
-*/
         }
 
         feedbackAndTestDao?.create(FeedbackAndTest(
@@ -96,39 +115,46 @@ class TestScoreFragment : Fragment() {
         var editText: EditText? = null
         val layout = linearLayout {
             padding = 10
-            backgroundColor = Color.parseColor("#00a7d0")
+            //backgroundColor = Color.parseColor("#00a7d0")
             weightSum = 4f
 
+            gravity = Gravity.CENTER_VERTICAL
 
-            textView(if (isTitle) "ID" else attendee.id.toString())
-                    .lparams(weight = 1f, width = 0).textSize = 20f
-            textView(if (isTitle) "Name" else attendee.first_name + attendee.last_name)
-                    .lparams(weight = 1f, width = 0).textSize = 20f
+            textView(if (isTitle) "ID" else attendee.id.toString()) {
+                textSize = 20f
+                textColor = Color.WHITE
+            }.lparams(weight = 1f, width = 0)
+            textView(if (isTitle) "Name" else attendee.first_name + attendee.last_name) {
+                textSize = 20f
+                textColor = Color.WHITE
+            }.lparams(weight = 1f, width = 0)
 
             if (isTitle) {
-                textView("Score")
-                        .lparams(weight = 1f, width = 0).textSize = 20f
+                textView("Score") {
+                    textSize = 20f
+                    textColor = Color.WHITE
+                }.lparams(weight = 1f, width = 0)
             } else {
                 editText = editText {
                     textSize = 20f
                     tag = attendee.id
                     inputType = InputType.TYPE_CLASS_NUMBER
+
+                    background.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+                    textColor = Color.WHITE
                     /*if (previousAttendance != null)
                         isChecked = previousAttendance!!.contains(attendee.id.toString())*/
                 }.lparams(weight = 1f, width = 0) {
                     gravity = Gravity.CENTER
                 }
             }
-
         }
         return layout to editText
-
     }
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
     }
 
     override fun onDetach() {

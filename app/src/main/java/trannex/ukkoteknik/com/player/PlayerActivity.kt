@@ -2,10 +2,12 @@ package trannex.ukkoteknik.com.player
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.RelativeLayout
@@ -47,21 +49,44 @@ class PlayerActivity : AppCompatActivity() {
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
+
+        val footer = Footer(top_parent)
+        val params = footer.view.layoutParams as RelativeLayout.LayoutParams
+        params.apply {
+            addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+            width = ViewGroup.LayoutParams.MATCH_PARENT
+            height = dip(50)
+        }
+
+        footer.view.layoutParams = params
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        };
+        activeCurrentType()
+    }
+
+    fun createNavBar() {
+        nav_view.removeAllViews()
         nav_view.scrollView {
             verticalLayout {
                 var length = contentChildren.size()
                 for ((index, children) in contentChildren.withIndex()) {
-                    var content: JsonObject? = null
-                    if (!contentChildren[index].obj.has("contentType"))
-                        content = SelectedBatchHandler.getContentFromId(JsonParser().parse(contentChildren[index]["asset"].string)["id"].int);
-                    else {
-                        content = contentChildren[index].obj
+                    var contentId: Int? = null
+                    var content: JsonObject = children.obj
+                    if (children.obj.has("asset")) {
+                        contentId = JsonParser().parse(children["asset"].string)["id"].int
+                        //content = SelectedBatchHandler.getContentFromId(contentId)
                     }
                     if (content != null) {
                         linearLayout {
                             padding = 20
                             textView(content["name"].string) {
                                 textColorResource = R.color.black
+
+                                if (getCompletionStatus(content["contentType"].string, contentId)) {
+                                    setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.tick, 0)
+                                    compoundDrawablePadding = 10
+                                }
                             }
                         }.onClick {
 
@@ -119,31 +144,27 @@ class PlayerActivity : AppCompatActivity() {
                 }
             }.margins(bottom = 50)
         }
+    }
 
-        val footer = Footer(top_parent)
-        val params = footer.view.layoutParams as RelativeLayout.LayoutParams
-        params.apply {
-            addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-            width = ViewGroup.LayoutParams.MATCH_PARENT
-            height = dip(50)
+    private fun getCompletionStatus(type: String, contentId: Int?): Boolean {
+        Log.i("contentId", "" + contentId)
+        return when (type) {
+            Constants.ATTENDANCE -> SelectedBatchHandler.isAttendanceTaken()
+            Constants.PRE_TEST -> SelectedBatchHandler.isPreTestTaken()
+            Constants.POST_TEST -> SelectedBatchHandler.isPostTestTaken()
+            Constants.FEEDBACK -> SelectedBatchHandler.isFeedbackTaken()
+            else -> SelectedBatchHandler.isActivityTaken(contentId!!)
         }
-
-        footer.view.layoutParams = params
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
-        };
-        activeCurrentType()
     }
 
     private fun activeCurrentType() {
-        //val content = SelectedBatchHandler.getContentFromId(contentChildren[index]["contentId"].string);
         var content: JsonObject? = null
         if (!contentChildren[index].obj.has("contentType"))
             content = SelectedBatchHandler.getContentFromId(JsonParser().parse(contentChildren[index]["asset"].string)["id"].int);
         else {
             content = contentChildren[index].obj
         }
-        if (content != null)
+        if (content != null) {
             when (content["contentType"].string) {
                 Constants.VIDEO -> {
                     replaceFragment(VideoFragment().apply { data(content) }, R.id.playerView)
@@ -159,34 +180,13 @@ class PlayerActivity : AppCompatActivity() {
                 }
                 Constants.FEEDBACK -> {
                     replaceFragment(FeedbackFragment().apply { data(content) }, R.id.playerView)
-                    /*var ratingBar: RatingBar? = null
-                    alert {
-                        isCancelable = false
-                        customView {
-                            verticalLayout {
-                                gravity = Gravity.CENTER
-                                ratingBar = ratingBar {
-                                    numStars = 5
-                                    //rating = 3.4f
-                                    stepSize = 0.7f
-                                }.lparams(width = WRAP_CONTENT)
-                            }
-                        }
-                        positiveButton("Rate") {
-                            val feedbackAndTest = MyApp.mDatabaseHelper.getFeedbackAndTestDao()
-                            feedbackAndTest?.create(FeedbackAndTest(
-                                    trnx_batch_id = SelectedBatchHandler.programData()["batch_id"].int,
-                                    trnx_batch_programs_id = SelectedBatchHandler.programData()["id"].int,
-                                    data = ratingBar?.rating.toString(),
-                                    type = Constants.FEEDBACK,
-                                    deviceId = DeviceIdUtils(this@PlayerActivity).androidId,
-                                    syncStatus = 0
-                            ))
-                            onBackPressed()
-                        }
-                    }.show()*/
                 }
             }
+
+            Handler().postDelayed({
+                createNavBar()
+            }, 100)
+        }
     }
 
     override fun onBackPressed() {
