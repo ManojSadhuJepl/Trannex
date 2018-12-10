@@ -8,7 +8,9 @@ import android.support.v7.widget.CardView
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.activity_player_new.view.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 import org.jetbrains.anko.sdk27.coroutines.onClick
@@ -42,19 +44,22 @@ fun ViewGroup.programCard(activity: Activity,
 
         verticalLayout {
             gravity = Gravity.CENTER
+
+            buttonCustom(program).apply {
+                textColorResource = R.color.blue
+                textSize = dip(25).toFloat()
+                width = WRAP_CONTENT
+                backgroundResource = R.drawable.circle
+                padding = 10
+                setTypeface(null, Typeface.BOLD)
+                gravity = Gravity.CENTER
+            }.lparams(width = dip(110),height = dip(110)).margins(top = 10)
+/*
             cardView {
                 radius = 50f
-                textView(program) {
-                    textColorResource = R.color.blue
-                    textSize = dip(25).toFloat()
-                    width = MATCH_PARENT
-                    backgroundColor = Color.parseColor("#000000")
-                    padding = 10
-                    setTypeface(null, Typeface.BOLD)
-                    gravity = Gravity.CENTER
-                }
 
             }.lparams(width = 100, height = 100).margins(top = 10, bottom = 5)
+*/
 
             verticalLayout {
                 padding = 20

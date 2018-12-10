@@ -27,6 +27,7 @@ class IntroActivity : AppCompatActivity() {
     lateinit var hff: ImageView
     lateinit var oppertunity: ImageView
     lateinit var ukkoteknok: ImageView
+    lateinit var previousImage: ImageView
     lateinit var nextImage: ImageView
     lateinit var videoLayout: LinearLayout
     lateinit var rootView: FrameLayout
@@ -82,6 +83,16 @@ class IntroActivity : AppCompatActivity() {
                         gravity = Gravity.BOTTOM
                     }
 
+                    previousImage = imageView {
+                        setImageResource(R.drawable.previous_img)
+                        visibility = GONE
+                        onClick {
+                            finish()
+                        }
+                    }.lparams {
+                        setMargins(40, 0, 0, 40)
+                        gravity = Gravity.START or Gravity.BOTTOM
+                    }
                     nextImage = imageView {
                         setImageResource(R.drawable.next)
                         visibility = GONE
@@ -90,7 +101,7 @@ class IntroActivity : AppCompatActivity() {
                         }
                     }.lparams {
                         setMargins(0, 0, 40, 40)
-                        gravity = Gravity.RIGHT or Gravity.BOTTOM
+                        gravity = Gravity.END or Gravity.BOTTOM
                     }
 
                     videoLayout = linearLayout {
@@ -149,6 +160,9 @@ class IntroActivity : AppCompatActivity() {
 
                 override fun onAnimationEnd(p0: Animation?) {
                     runOnUiThread {
+                        previousImage.visibility = VISIBLE
+                        previousImage.startAnimation(fadeinAnimation)
+
                         nextImage.visibility = VISIBLE
                         nextImage.startAnimation(fadeinAnimation)
                         videoLayout.visibility = VISIBLE

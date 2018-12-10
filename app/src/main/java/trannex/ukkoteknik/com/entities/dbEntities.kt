@@ -40,6 +40,24 @@ class Batches() {
     }
 }
 
+/*@DatabaseTable
+class BatchExecution() {
+    @DatabaseField()
+    var batchId = 0
+    @DatabaseField(format = Constants.TIMESTAMP_FORMAT)
+    var created_at: Date = MyApp.getDate()
+    @DatabaseField()
+    var timeSpent: String = ""
+    @Exclude
+    @DatabaseField
+    var syncStatus: Int = 1
+
+    constructor(batchId: Int, timeSpent: String) : this() {
+        this.batchId = batchId
+        this.timeSpent = timeSpent
+    }
+}*/
+
 @DatabaseTable
 data class Attendance(
         @Exclude
@@ -104,7 +122,7 @@ data class VideoAndInteractive(
         @DatabaseField
         var trnx_batch_programs_id: Int,
         @DatabaseField
-        var trnx_content_id: Int,
+        var trnx_content_id: Int?,
         @DatabaseField
         var start_time: Timestamp?,
         @DatabaseField

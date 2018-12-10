@@ -17,6 +17,7 @@ class DatabaseHelper(context: Context, name: String) : OrmLiteSqliteOpenHelper(c
     private var feedbackAndTestDao: Dao<FeedbackAndTest, String>? = null
     private var videoAndInteractiveDao: Dao<VideoAndInteractive, String>? = null
     private var assetDao: Dao<Asset, String>? = null
+    //private var batchExecutionDao: Dao<BatchExecution, String>? = null
 
     override fun onCreate(sqLiteDatabase: SQLiteDatabase, connectionSource: ConnectionSource) {
         try {
@@ -26,6 +27,7 @@ class DatabaseHelper(context: Context, name: String) : OrmLiteSqliteOpenHelper(c
             TableUtils.createTable(connectionSource, FeedbackAndTest::class.java)
             TableUtils.createTable(connectionSource, VideoAndInteractive::class.java)
             TableUtils.createTable(connectionSource, Asset::class.java)
+            //TableUtils.createTable(connectionSource, BatchExecution::class.java)
         } catch (e: SQLException) {
             e.printStackTrace()
         }
@@ -44,10 +46,10 @@ class DatabaseHelper(context: Context, name: String) : OrmLiteSqliteOpenHelper(c
             TableUtils.dropTable<FeedbackAndTest, Any>(this.getConnectionSource(), FeedbackAndTest::class.java, true)
             TableUtils.dropTable<VideoAndInteractive, Any>(this.getConnectionSource(), VideoAndInteractive::class.java, true)
             TableUtils.dropTable<Asset, Any>(this.getConnectionSource(), Asset::class.java, true)
+            //TableUtils.dropTable<BatchExecution, Any>(this.getConnectionSource(), BatchExecution::class.java, true)
         } catch (e: SQLException) {
             e.printStackTrace()
         }
-
     }
 
     fun clearTables() {
@@ -57,6 +59,7 @@ class DatabaseHelper(context: Context, name: String) : OrmLiteSqliteOpenHelper(c
             TableUtils.clearTable(this.getConnectionSource(), FeedbackAndTest::class.java)
             TableUtils.clearTable(this.getConnectionSource(), VideoAndInteractive::class.java)
             TableUtils.clearTable(this.getConnectionSource(), Asset::class.java)
+            //TableUtils.clearTable(this.getConnectionSource(), BatchExecution::class.java)
         } catch (e: SQLException) {
             e.printStackTrace()
         }
@@ -129,6 +132,19 @@ class DatabaseHelper(context: Context, name: String) : OrmLiteSqliteOpenHelper(c
         }
         return assetDao
     }
+
+/*
+    fun getBatchExecutionDao(): Dao<BatchExecution, String>? {
+        if (batchExecutionDao == null) {
+            try {
+                batchExecutionDao = getDao(BatchExecution::class.java)
+            } catch (e: SQLException) {
+                e.printStackTrace()
+            }
+        }
+        return batchExecutionDao
+    }
+*/
 
     companion object {
         private val TAG = "DatabaseHelper"

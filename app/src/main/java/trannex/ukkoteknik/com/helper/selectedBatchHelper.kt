@@ -196,9 +196,7 @@ object SelectedBatchHandler {
                 ?.and()
                 ?.eq("trnx_content_id", contentId)
                 ?.query()
-                ?.filter {
-                    it.created_at.equalString(MyApp.getDate())
-                }
+
         if (list!!.isEmpty())
             return false to "---"
         else {
@@ -281,9 +279,6 @@ object SelectedBatchHandler {
                 ?.eq("trnx_batch_programs_id", programData["id"].int)
                 ?.and()
                 ?.eq("trnx_content_id", contentId)
-                ?.query()
-                ?.filter {
-                    it.created_at.equalString(MyApp.getDate())
-                }!!.isNotEmpty()
+                ?.countOf()!! > 0
     }
 }

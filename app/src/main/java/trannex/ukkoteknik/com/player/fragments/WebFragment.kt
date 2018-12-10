@@ -15,11 +15,12 @@ import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.dip
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.view
 import org.jetbrains.anko.webView
 import trannex.ukkoteknik.com.entities.VideoAndInteractive
-import trannex.ukkoteknik.com.extensions.margins
 import trannex.ukkoteknik.com.helper.SelectedBatchHandler
 import trannex.ukkoteknik.com.player.PlayerActivity
 import trannex.ukkoteknik.com.singleton.MyApp
@@ -43,7 +44,7 @@ class WebFragment : Fragment() {
         playerActivity = activity as PlayerActivity
 
         val view = UI {
-            linearLayout {
+            verticalLayout {
                 gravity = Gravity.CENTER
                 web = webView {
                     settings.apply {
@@ -61,12 +62,12 @@ class WebFragment : Fragment() {
                         }
                     }
                 }.apply {
-                    lparams(width = ViewGroup.LayoutParams.MATCH_PARENT, height = ViewGroup.LayoutParams.MATCH_PARENT)
-                    margins(bottom = 33)
+                    lparams(width = ViewGroup.LayoutParams.MATCH_PARENT, height = 0, weight = 1f)
+                    //padding(bottom = 33)
                 }
+                view().lparams(height = dip(50))
             }
         }.view
-
 
         return view;
     }

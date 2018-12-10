@@ -90,14 +90,13 @@ inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Fragmen
     beginTransaction().func().commit()
 }
 
-class asyncExtension(val backgroundHandler: () -> Unit, val completeHandler: () -> Unit) : AsyncTask<Void, Void, Void>() {
-    override fun doInBackground(vararg params: Void?): Void? {
-        backgroundHandler()
-        return null
+class asyncExtension(val backgroundHandler: () -> Boolean, val completeHandler: (result: Boolean) -> Unit) : AsyncTask<Void, Void, Boolean>() {
+    override fun doInBackground(vararg params: Void?): Boolean {
+        return backgroundHandler()
     }
 
-    override fun onPostExecute(result: Void?) {
+    override fun onPostExecute(result: Boolean) {
         super.onPostExecute(result)
-        completeHandler()
+        completeHandler(result)
     }
 }

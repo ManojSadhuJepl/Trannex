@@ -25,11 +25,15 @@ import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import trannex.ukkoteknik.com.R
+import trannex.ukkoteknik.com.entities.VideoAndInteractive
 import trannex.ukkoteknik.com.extensions.padding
 import trannex.ukkoteknik.com.helper.SelectedBatchHandler
 import trannex.ukkoteknik.com.main.MainActivity
 import trannex.ukkoteknik.com.player.PlayerActivity
 import trannex.ukkoteknik.com.singleton.Constants
+import trannex.ukkoteknik.com.singleton.MyApp
+import trannex.ukkoteknik.com.utils.DeviceIdUtils
+import java.sql.Timestamp
 
 
 class HomeActivity : AppCompatActivity() {
@@ -49,7 +53,10 @@ class HomeActivity : AppCompatActivity() {
     val contentChildren = mutableMapOf<Int, JsonArray>()
     var selectedDay: Int = 0
 
-    val breadCrumbList = mutableListOf("My Programs", "Home")
+    val breadCrumbList = mutableListOf("Main", "Home")
+
+    val startTime: Timestamp = MyApp.getCurrentTimeStamp()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -411,6 +418,26 @@ class HomeActivity : AppCompatActivity() {
             } else if (activitiesLayout.visibility == VISIBLE) {
                 attachActivities()
             }
-        }, 100)
+        }, 1000)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        MyApp.mDatabaseHelper.getVideoAndInteractiveDao()?.create(VideoAndInteractive(
+                trnx_batch_id = SelectedBatchHandler.programData()["batch_id"].int,
+                trnx_batch_programs_id = SelectedBatchHandler.programData()["id"].int,
+                start_time = startTime,
+                trnx_content_id = null,
+                end_time = MyApp.getCurrentTimeStamp(),
+                deviceId = DeviceIdUtils(this).androidId,
+                syncStatus = 0
+        ))
+/*
+        MyApp.mDatabaseHelper.getBatchExecutionDao()
+                ?.create(BatchExecution(batchId = SelectedBatchHandler.batch()["id"].int,
+                        timeSpent = time.toString()))
+*/
+
     }
 }

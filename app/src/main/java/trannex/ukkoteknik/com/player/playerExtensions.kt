@@ -4,11 +4,12 @@ import android.graphics.Color
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RatingBar
-import org.jetbrains.anko.ratingBar
 import org.jetbrains.anko.sdk27.coroutines.onRatingBarChange
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.textView
+import org.jetbrains.anko.themedRatingBar
 import org.jetbrains.anko.verticalLayout
+import trannex.ukkoteknik.com.R
 import trannex.ukkoteknik.com.extensions.margins
 
 /**
@@ -24,10 +25,11 @@ fun ViewGroup.question(title: String, rating: Float, ratingChange: (id: Float) -
             textSize = 20f
             textColor = Color.WHITE
         }
-        ratingBar = ratingBar {
+        ratingBar = themedRatingBar(R.style.RatingBar) {
             numStars = 5
             stepSize = 0.5f
             setRating(rating)
+
             //progressDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
 
             onRatingBarChange { ratingBar, rating, fromUser -> ratingChange(rating) }

@@ -47,7 +47,7 @@ public class MyApp extends Application {
         instance = this;
 
         gson = new GsonBuilder().setExclusionStrategies(new AnnotationExclusionStrategy())
-                .setDateFormat(Constants.TIMESTAMP_FORMAT).create();
+                .serializeNulls().setDateFormat(Constants.TIMESTAMP_FORMAT).create();
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
 

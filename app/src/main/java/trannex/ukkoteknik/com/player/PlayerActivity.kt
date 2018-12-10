@@ -8,6 +8,8 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.RelativeLayout
@@ -103,7 +105,9 @@ class PlayerActivity : AppCompatActivity() {
                                 if (!SelectedBatchHandler.isAttendanceTaken()) {
                                     activeFragment()
                                 } else {
-                                    toast("Attendance is already taken.")
+                                    alert("Attendance is already taken.") {
+                                        yesButton { }
+                                    }.show()
                                 }
                             } else if (SelectedBatchHandler.isAttendanceTaken()) {
                                 when (content["contentType"].string) {
@@ -111,30 +115,43 @@ class PlayerActivity : AppCompatActivity() {
                                         if (!SelectedBatchHandler.isPreTestTaken()) {
                                             activeFragment()
                                         } else {
-                                            toast("Pre test is already taken.")
+                                            alert("Pre test is already taken.") {
+                                                yesButton { }
+                                            }.show()
                                         }
                                     }
                                     Constants.POST_TEST -> {
+                                        if (!SelectedBatchHandler.isPreTestTaken()) {
+                                            alert("Pre test is required.") {
+                                                yesButton { }
+                                            }.show()
+                                            return@onClick
+                                        }
+
                                         if (!SelectedBatchHandler.isPostTestTaken()) {
                                             activeFragment()
                                         } else {
-                                            toast("Post test is already taken.")
+                                            alert("Post test is already taken.") {
+                                                yesButton { }
+                                            }.show()
                                         }
                                     }
                                     Constants.FEEDBACK -> {
                                         if (!SelectedBatchHandler.isFeedbackTaken()) {
                                             activeFragment()
                                         } else {
-                                            toast("Feedback is already taken.")
+                                            alert("Feedback is already taken.") {
+                                                yesButton { }
+                                            }.show()
                                         }
                                     }
                                     else -> activeFragment()
                                 }
                             } else {
-                                toast("Please take attendance to proceed.")
+                                alert("Please take attendance to proceed.") {
+                                    yesButton { }
+                                }.show()
                             }
-
-
                         }
                     }
                     if (index != length - 1)
@@ -188,6 +205,22 @@ class PlayerActivity : AppCompatActivity() {
             }, 100)
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.cross, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.cross) {
+            if (drawer_layout.isDrawerOpen(GravityCompat.START))
+                drawer_layout.closeDrawer(GravityCompat.START)
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {

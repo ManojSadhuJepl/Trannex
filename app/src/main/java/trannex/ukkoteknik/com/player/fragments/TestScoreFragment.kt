@@ -85,9 +85,9 @@ class TestScoreFragment : Fragment() {
                         var score = ""
 
                         if (type == Constants.POST_TEST) {
-                            score = preTestData.filter {
-                                it == attendee!!.id.toString()
-                            }[0]
+                            score = JsonParser().parse(SelectedBatchHandler.preTestToday()!!.data).array.filter {
+                                it["attendeeId"].string == attendee.id.toString()
+                            }[0]["score"].string
                         }
 
                         val pair = userRow(isTitle = false, score = score,
