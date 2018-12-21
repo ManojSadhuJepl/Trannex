@@ -58,6 +58,7 @@ class WebFragment : Fragment() {
                             loadUrl(filePath)
                             //loadUrl("https://www.google.com")
                         } catch (e: Exception) {
+                            e.printStackTrace()
                             //playerActivity.onBackPressed()
                         }
                     }

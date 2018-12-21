@@ -23,7 +23,7 @@ class Asset() {
     @SerializedName("file_name")
     var name = ""
     @DatabaseField()
-    @SerializedName("asset_type")
+    @SerializedName("file_type")
     var type = ""
 
 }

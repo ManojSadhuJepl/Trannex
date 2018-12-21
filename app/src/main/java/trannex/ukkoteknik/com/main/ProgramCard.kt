@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
-import kotlinx.android.synthetic.main.activity_player_new.view.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 import org.jetbrains.anko.sdk27.coroutines.onClick
@@ -45,15 +44,13 @@ fun ViewGroup.programCard(activity: Activity,
         verticalLayout {
             gravity = Gravity.CENTER
 
-            buttonCustom(program).apply {
-                textColorResource = R.color.blue
+            textView(program).apply {
+                textColorResource = android.R.color.black
                 textSize = dip(25).toFloat()
-                width = WRAP_CONTENT
-                backgroundResource = R.drawable.circle
-                padding = 10
+                //backgroundResource = R.drawable.circle
                 setTypeface(null, Typeface.BOLD)
                 gravity = Gravity.CENTER
-            }.lparams(width = dip(110),height = dip(110)).margins(top = 10)
+            }.lparams(width = WRAP_CONTENT, height = WRAP_CONTENT).margins(top = 10)
 /*
             cardView {
                 radius = 50f
@@ -78,12 +75,12 @@ fun ViewGroup.programCard(activity: Activity,
                     textView("Location") {
                         textSize = dip(20).toFloat()
                         setTypeface(null, Typeface.BOLD)
-                        width = dip(270)
+                        width = dip(220)
                         textColor = Color.WHITE
                     }
                     textView(location) {
                         textSize = dip(20).toFloat()
-                        width = dip(180)
+                        width = dip(230)
                         textColor = Color.WHITE
                     }
                 }

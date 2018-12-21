@@ -23,7 +23,8 @@ public class APIClient {
 
         retrofit = new Retrofit.Builder()
                 //.baseUrl("http://192.168.22.23:8081/ut_devops/utpf/public/")
-                .baseUrl("https://stage-all.utpfapps.com/public/")
+                //.baseUrl("https://stage-all.utpfapps.com/public/")
+                .baseUrl("https://trannex.utpfapps.com/")
                 .addConverterFactory(GsonConverterFactory.create(MyApp.gson))
                 .client(client)
                 .build();
