@@ -1,6 +1,7 @@
 package trannex.ukkoteknik.com.singleton;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,7 +22,7 @@ import trannex.ukkoteknik.com.utils.AnnotationExclusionStrategy;
 /**
  * Created by  Manoj Sadhu on 7/16/2018.
  */
-public class MyApp extends Application {
+public class MyApp extends MultiDexApplication {
     public static APIInterface apiInterface;
     public static Gson gson;
     public static MyApp instance;

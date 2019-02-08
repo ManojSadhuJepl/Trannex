@@ -18,13 +18,14 @@ public class APIClient {
     public static Retrofit getClient() {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         retrofit = new Retrofit.Builder()
                 //.baseUrl("http://192.168.22.23:8081/ut_devops/utpf/public/")
                 //.baseUrl("https://stage-all.utpfapps.com/public/")
-                .baseUrl("https://trannex.utpfapps.com/")
+                //.baseUrl("https://trannex.utpfapps.com/")
+                .baseUrl("https://hff-prd-all.utpfapps.com/")
                 .addConverterFactory(GsonConverterFactory.create(MyApp.gson))
                 .client(client)
                 .build();

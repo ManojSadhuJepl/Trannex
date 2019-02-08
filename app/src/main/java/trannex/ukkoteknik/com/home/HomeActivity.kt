@@ -179,7 +179,7 @@ class HomeActivity : AppCompatActivity() {
                     val jsonArray = JsonArray()
                     jsonArray.add(
                             jsonObject(
-                                    "name" to Constants.ATTENDANCE,
+                                    "name" to "Attendance",
                                     "contentType" to Constants.ATTENDANCE,
                                     "duration" to "NA"
                             )
@@ -187,17 +187,25 @@ class HomeActivity : AppCompatActivity() {
 
                     jsonArray.add(
                             jsonObject(
-                                    "name" to Constants.PRE_TEST,
+                                    "name" to "Pre Test",
                                     "contentType" to Constants.PRE_TEST,
                                     "duration" to "NA"
                             )
                     )
 
+                    /*val clonedDayChildren = day["children"].array.deepCopy();
+                    clonedDayChildren += jsonObject(
+                            "name" to "Pre Test",
+                            "contentType" to Constants.PRE_TEST,
+                            "duration" to "NA"
+                    )*/
+
+
                     day["children"].array.forEach { jsonArray.add(it) }
 
                     jsonArray.add(
                             jsonObject(
-                                    "name" to Constants.POST_TEST,
+                                    "name" to "Post Test",
                                     "contentType" to Constants.POST_TEST,
                                     "duration" to "NA"
                             )
@@ -205,7 +213,7 @@ class HomeActivity : AppCompatActivity() {
 
                     jsonArray.add(
                             jsonObject(
-                                    "name" to Constants.FEEDBACK,
+                                    "name" to "Feedback",
                                     "contentType" to Constants.FEEDBACK,
                                     "duration" to "NA"
                             )

@@ -10,6 +10,7 @@ import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.padding
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.textView
+import trannex.ukkoteknik.com.singleton.Constants
 
 /**
  * Created by  Manoj Sadhu on 9/27/2018.
@@ -29,7 +30,7 @@ fun ViewGroup.activityRow(name: String, type: String, duration: String, status: 
             ellipsize = TextUtils.TruncateAt.END
             maxLines = 1
         }.lparams(weight = 3f, width = 0)
-        textView(type) {
+        textView(Constants.displayTypes[type]) {
             textSize = 20f
             textColor = if (isTitle) Color.WHITE else Color.BLACK
         }.lparams(weight = 1f, width = 0)
